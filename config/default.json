@@ -1,0 +1,5 @@
+{
+  "jwtSecret": "sl_myJwtSecret",
+  "reCAPTCHA": "6Le54pscAAAAANEv4SCNDdfAPveNBdBBfevtXv4l",
+  "verifyURL": "https://google.com/recaptcha/api/siteverify?"
+}
