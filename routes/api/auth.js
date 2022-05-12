@@ -45,7 +45,7 @@ const upload = multer({ storage: storage });
 // @desc Auth the user
 // @acces Public
 router.post("/", async (req, res) => {
-  const { phone, password } = req.body;
+  const { email, password } = req.body;
   // Verify URL
   // const query = stringify({
   //   secret: config.get("reCAPTCHA"),
@@ -60,13 +60,13 @@ router.post("/", async (req, res) => {
   //   return res.status(400).json({ msg: "Failed captcha verification" });
   // }
 
-  if (!phone || !password) {
+  if (!email || !password) {
     return res
       .status(400)
       .json({ msg: "Please enter all fields", status: "ERR" });
   }
 
-  let user = await User.findOne({ where: { phone: phone } }, { plain: true });
+  let user = await User.findOne({ where: { email: email } }, { plain: true });
   if (!user) {
     return res
       .status(400)
@@ -85,7 +85,7 @@ router.post("/", async (req, res) => {
         .status(400)
         .json({ msg: "Invalid credentials", status: "ERR" });
     jwt.sign(
-      { id: user.id, isManager: user.isManager, phone: user.phone },
+      { id: user.id, isManager: user.isManager, email: user.email },
       config.get("jwtSecret"),
       {
         expiresIn: 604800,
@@ -97,15 +97,10 @@ router.post("/", async (req, res) => {
           user: {
             id: user.id,
             name: user.name,
-            isManager: user.isManager,
-            phone: user.phone,
-            balance: user.balance,
+
+            email: user.email,
+
             password: user.password,
-            country: user.country,
-            region: user.region,
-            address: user.address,
-            zip: user.zip,
-            wallet: user.wallet,
           },
         });
       }
