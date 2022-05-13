@@ -14,9 +14,14 @@
 import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
 
-const apiUrl = "http://localhost/api/:3000/";
+const apiUrl = "http://localhost:5000/api";
 const httpClient = fetchUtils.fetchJson;
-
+const headers = new Headers({ Accept: "application/json" });
+const { token } = JSON.parse(localStorage.getItem("token"));
+headers.set("Authorization", `Bearer ${token}`);
+const options = {
+  headers: headers,
+};
 export default {
   getList: (resource, params) => {
     const { page, perPage } = params.pagination;
@@ -28,7 +33,7 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    return httpClient(url).then(({ headers, json }) => ({
+    return httpClient(url, options).then(({ headers, json }) => ({
       data: json,
       total: parseInt(headers.get("content-range").split("/").pop(), 10),
     }));

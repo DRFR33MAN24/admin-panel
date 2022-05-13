@@ -12,8 +12,8 @@ const User = require("../../models/User");
 // @route POST api/users
 // @desc Register New User
 // @acces Public
-router.post("/", async (req, res) => {
-  //console.log(req.body);
+router.post("/register", async (req, res) => {
+  console.log(req.body);
   const { name, phone, password, active } = req.body;
   // Verify URL
   // const query = stringify({
@@ -83,6 +83,50 @@ router.post("/", async (req, res) => {
       });
     });
   });
+});
+
+router.get("/", auth, async (req, res) => {
+  console.log("Get Users Route", req.query);
+  let user = await User.findAll({
+    where: {
+      id: req.user.id,
+    },
+    plain: true,
+  });
+
+  if (user.active === false) {
+    return res
+      .status(400)
+      .json({ msg: "Please activate your account", status: "ERR" });
+  }
+
+  res.json(user);
+
+  // User.findById(req.user.id)
+  //   .select("-password")
+  //   .then(user => res.json(user));
+});
+
+router.get("/:id", auth, async (req, res) => {
+  //console.log("LoadUser Route");
+  let user = await User.findAll({
+    where: {
+      id: req.params.id,
+    },
+    plain: true,
+  });
+
+  if (user.active === false) {
+    return res
+      .status(400)
+      .json({ msg: "Please activate your account", status: "ERR" });
+  }
+
+  res.json(user);
+
+  // User.findById(req.user.id)
+  //   .select("-password")
+  //   .then(user => res.json(user));
 });
 
 // pass the old user info

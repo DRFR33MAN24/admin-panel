@@ -46,6 +46,9 @@ const upload = multer({ storage: storage });
 // @acces Public
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
+
+  console.log(req.body);
+
   // Verify URL
   // const query = stringify({
   //   secret: config.get("reCAPTCHA"),
@@ -106,28 +109,6 @@ router.post("/", async (req, res) => {
       }
     );
   });
-});
-
-router.get("/user", auth, async (req, res) => {
-  //console.log("LoadUser Route");
-  let user = await User.findAll({
-    where: {
-      id: req.user.id,
-    },
-    plain: true,
-  });
-
-  if (user.active === false) {
-    return res
-      .status(400)
-      .json({ msg: "Please activate your account", status: "ERR" });
-  }
-
-  res.json(user);
-
-  // User.findById(req.user.id)
-  //   .select("-password")
-  //   .then(user => res.json(user));
 });
 
 router.get("/img", auth, async (req, res) => {

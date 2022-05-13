@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require("cors");
 //const config = require("config");
 const path = require("path");
 const db = require("./database");
@@ -7,6 +7,7 @@ const User = require("./models/User");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 db.authenticate()
