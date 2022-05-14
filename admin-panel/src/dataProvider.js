@@ -15,13 +15,15 @@ import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
 
 const apiUrl = "http://localhost:5000/api";
-const httpClient = fetchUtils.fetchJson;
-const headers = new Headers({ Accept: "application/json" });
-const { token } = JSON.parse(localStorage.getItem("token"));
-headers.set("Authorization", `Bearer ${token}`);
-const options = {
-  headers: headers,
+const httpClient = (url, options = {}) => {
+  if (!options.headers) {
+    options.headers = new Headers({ Accept: "application/json" });
+  }
+  const token = localStorage.getItem("token");
+  options.headers.set("x-auth-token", token);
+  return fetchUtils.fetchJson(url, options);
 };
+
 export default {
   getList: (resource, params) => {
     const { page, perPage } = params.pagination;
@@ -33,9 +35,9 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    return httpClient(url, options).then(({ headers, json }) => ({
+    return httpClient(url).then(({ headers, json }) => ({
       data: json,
-      total: parseInt(headers.get("content-range").split("/").pop(), 10),
+      total: parseInt(headers.get("X-Total-Count"), 10),
     }));
   },
 

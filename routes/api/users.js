@@ -3,11 +3,35 @@ const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
+const mapValues = require("lodash/mapValues");
 //const axios = require("axios");
 
 const auth = require("../../middleware/auth");
 // User Model
 const User = require("../../models/User");
+
+const getFilter = (filter, filtersOption) =>
+  mapValues(filter, (value, key) => {
+    if (filtersOption && filtersOption[key]) {
+      return filtersOption[key](value);
+    }
+    return value;
+  });
+const parseQuery = (query, filtersOption) => {
+  const { range, sort, filter } = query;
+
+  const [from, to] = range ? JSON.parse(range) : [0, 100];
+
+  const { q, ...filters } = JSON.parse(filter || "{}");
+
+  return {
+    offset: from,
+    limit: to - from + 1,
+    filter: getFilter(filters, filtersOption),
+    order: [sort ? JSON.parse(sort) : ["id", "ASC"]],
+    q,
+  };
+};
 
 // @route POST api/users
 // @desc Register New User
@@ -87,11 +111,17 @@ router.post("/register", async (req, res) => {
 
 router.get("/", auth, async (req, res) => {
   console.log("Get Users Route", req.query);
+  const parsedQuery = parseQuery(req.query);
+  console.log(parsedQuery);
   let user = await User.findAll({
-    where: {
-      id: req.user.id,
-    },
-    plain: true,
+    order: parseQuery.order,
+    offset: parseQuery.offset,
+    limit: parseQuery.limit,
+
+    // where: {
+    //   filter: parseQuery.filter,
+    // },
+    // plain: true,
   });
 
   if (user.active === false) {
@@ -99,8 +129,9 @@ router.get("/", auth, async (req, res) => {
       .status(400)
       .json({ msg: "Please activate your account", status: "ERR" });
   }
-
-  res.json(user);
+  res.setHeader("X-Total-Count", user.length);
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(user));
 
   // User.findById(req.user.id)
   //   .select("-password")
