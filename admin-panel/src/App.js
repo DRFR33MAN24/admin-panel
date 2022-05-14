@@ -1,6 +1,12 @@
 // in src/App.js
 import * as React from "react";
-import { Admin, Resource, ListGuesser, EditGuesser } from "react-admin";
+import {
+  Admin,
+  Resource,
+  ListGuesser,
+  EditGuesser,
+  ShowGuesser,
+} from "react-admin";
 import authProvider from "./authProvider";
 import dataProvider from "./dataProvider";
 import LoginPage from "./LoginPage";
@@ -14,7 +20,7 @@ const App = () => (
     dataProvider={dataProvider}
     authProvider={authProvider}
   >
-    <Resource name="users" list={ListGuesser} edit={EditGuesser} />
+    <Resource name="users" list={ListGuesser} />
   </Admin>
 );
 

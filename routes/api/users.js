@@ -110,18 +110,16 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/", auth, async (req, res) => {
-  console.log("Get Users Route", req.query);
+  //console.log("Get Users Route", req.query);
   const parsedQuery = parseQuery(req.query);
-  console.log(parsedQuery);
+  // console.log(parsedQuery);
   let user = await User.findAll({
-    order: parseQuery.order,
+    where: parseQuery.filter,
+    order: parsedQuery.order,
     offset: parseQuery.offset,
     limit: parseQuery.limit,
-
-    // where: {
-    //   filter: parseQuery.filter,
-    // },
-    // plain: true,
+    raw: true,
+    //plain: true,
   });
 
   if (user.active === false) {
@@ -129,6 +127,7 @@ router.get("/", auth, async (req, res) => {
       .status(400)
       .json({ msg: "Please activate your account", status: "ERR" });
   }
+  //console.log(user);
   res.setHeader("X-Total-Count", user.length);
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(user));
