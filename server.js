@@ -3,7 +3,6 @@ const cors = require("cors");
 //const config = require("config");
 const path = require("path");
 const db = require("./database");
-const User = require("./models/User");
 
 const app = express();
 
@@ -21,6 +20,7 @@ db.authenticate()
   });
 
 app.use("/api/users", require("./routes/api/users"));
+app.use("/api/players", require("./routes/api/players"));
 app.use("/api/auth", require("./routes/api/auth"));
 
 app.use(express.static("app"));

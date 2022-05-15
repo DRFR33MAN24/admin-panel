@@ -1,11 +1,12 @@
 const bcryptjs = require("bcryptjs");
-//const config = require("config");
+const config = require("config");
 const jwt = require("jsonwebtoken");
 //const axios = require("axios");
 
 const auth = require("../middleware/auth");
 // User Model
 const User = require("../models/User");
+const Player = require("../models/Player");
 
 const migarateUsers = () => {
   const users = [
@@ -73,5 +74,66 @@ const migarateUsers = () => {
     });
   });
 };
+const migratePlayers = () => {
+  const players = [
+    {
+      name: "Warrior90",
+      email: "war@gmail.com",
+      password: "warrior90",
+      active: true,
+    },
+    {
+      name: "JohnWick",
+      email: "john@yahoo.com",
+      password: "JohnWick",
+      active: true,
+    },
+    {
+      name: "JeffMyName",
+      email: "jeff@gmail.com",
+      password: "JeffMyName",
+      active: true,
+    },
+  ];
+  players.map((player) => {
+    const newplayer = Player.build({
+      name: `${player.name}`,
+      email: `${player.email}`,
+      password: `${player.password}`,
+      active: `${player.active}`,
+    });
+
+    // Create salt and hash
+
+    bcryptjs.genSalt(10, (err, salt) => {
+      bcryptjs.hash(newplayer.password, salt, (err, hash) => {
+        if (err) throw err;
+        newplayer.password = hash;
+        newplayer.save().then((player) => {
+          jwt.sign(
+            { id: player.id },
+            config.get("jwtSecret"),
+            {
+              expiresIn: 604800,
+            },
+            (err, token) => {
+              if (err) throw err;
+              res.json({
+                token,
+                player: {
+                  id: player.id,
+                  name: player.name,
+                  email: player.email,
+                  active: player.active,
+                },
+              });
+            }
+          );
+        });
+      });
+    });
+  });
+};
 migarateUsers();
-module.exports = migarateUsers;
+migratePlayers();
+module.exports = { migarateUsers, migratePlayers };
