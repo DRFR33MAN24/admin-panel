@@ -130,4 +130,29 @@ router.get("/:id", auth, async (req, res) => {
   //   .then(user => res.json(user));
 });
 
+router.put("/:id", auth, async (req, res) => {
+  //console.log("update route called", req.body);
+  res.setHeader("Content-Type", "application/json");
+  const { new_password, active, name, email } = req.body;
+
+  bcryptjs.genSalt(10, (err, salt) => {
+    bcryptjs.hash(new_password, salt, async (err, hash) => {
+      if (err) throw err;
+
+      await Player.update(
+        {
+          password: hash,
+          name: name,
+          active: active,
+          email: email,
+        },
+        {
+          where: { id: req.params.id },
+        }
+      );
+    });
+    res.end(JSON.stringify(req.body));
+  });
+});
+
 module.exports = router;

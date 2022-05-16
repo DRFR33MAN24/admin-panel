@@ -8,7 +8,7 @@ import {
   ShowGuesser,
 } from "react-admin";
 import { UserList } from "./UserList";
-import { PlayerList } from "./PlayerList";
+import { PlayerList, PlayerEdit } from "./PlayerList";
 import authProvider from "./authProvider";
 import dataProvider from "./dataProvider";
 import LoginPage from "./LoginPage";
@@ -25,7 +25,7 @@ const App = () => (
     authProvider={authProvider}
   >
     <Resource name="users" list={UserList} />
-    <Resource name="players" list={PlayerList} edit={EditGuesser} />
+    <Resource name="players" list={PlayerList} edit={PlayerEdit} />
   </Admin>
 );
 
