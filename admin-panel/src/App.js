@@ -12,12 +12,14 @@ import { PlayerList } from "./PlayerList";
 import authProvider from "./authProvider";
 import dataProvider from "./dataProvider";
 import LoginPage from "./LoginPage";
+import { Dashboard } from "./Dashboard";
 //import jsonServerProvider from "ra-data-json-server";
 
 //const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
 
 const App = () => (
   <Admin
+    dashboard={Dashboard}
     loginPage={LoginPage}
     dataProvider={dataProvider}
     authProvider={authProvider}
