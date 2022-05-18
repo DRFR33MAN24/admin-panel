@@ -13,24 +13,28 @@ const migarateUsers = () => {
     {
       name: "admin",
       email: "admin@admin.com",
+      profileImg: "https://picsum.photos/64",
       password: "admin",
       active: true,
     },
     {
       name: "Ron",
       email: "Ron@admin.com",
+      profileImg: "https://picsum.photos/64",
       password: "ron",
       active: true,
     },
     {
       name: "Bob",
       email: "bob@admin.com",
+      profileImg: "https://picsum.photos/64",
       password: "bob",
       active: true,
     },
     {
       name: "Dave",
       email: "dave@admin.com",
+      profileImg: "https://picsum.photos/64",
       password: "dave",
       active: true,
     },
@@ -39,6 +43,7 @@ const migarateUsers = () => {
     const newUser = User.build({
       name: `${user.name}`,
       email: `${user.email}`,
+      profileImg: `${user.profileImg}`,
       password: `${user.password}`,
       active: `${user.active}`,
     });
@@ -79,18 +84,21 @@ const migratePlayers = () => {
     {
       name: "Warrior90",
       email: "war@gmail.com",
+      profileImg: "https://picsum.photos/64",
       password: "warrior90",
       active: true,
     },
     {
       name: "JohnWick",
       email: "john@yahoo.com",
+      profileImg: "https://picsum.photos/64",
       password: "JohnWick",
       active: true,
     },
     {
       name: "JeffMyName",
       email: "jeff@gmail.com",
+      profileImg: "https://picsum.photos/64",
       password: "JeffMyName",
       active: true,
     },
@@ -99,6 +107,7 @@ const migratePlayers = () => {
     const newplayer = Player.build({
       name: `${player.name}`,
       email: `${player.email}`,
+      profileImg: `${player.profileImg}`,
       password: `${player.password}`,
       active: `${player.active}`,
     });

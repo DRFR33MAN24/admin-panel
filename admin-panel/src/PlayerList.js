@@ -10,11 +10,18 @@ import {
   TextInput,
   NumberInput,
   DateInput,
+  Show,
+  SimpleShowLayout,
+  RichTextField,
+  EditButton,
+  ImageField,
+  ImageInput
 } from "react-admin";
 export const PlayerList = () => (
   <List>
-    <Datagrid rowClick="edit">
+    <Datagrid rowClick="show">
       <TextField source="id" />
+      <ImageField source="profileImg" />
       <NumberField source="active" />
       <TextField source="name" />
       <EmailField source="email" />
@@ -22,6 +29,7 @@ export const PlayerList = () => (
       <DateField source="register_date" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
+      <EditButton />
     </Datagrid>
   </List>
 );
@@ -33,6 +41,7 @@ export const PlayerEdit = () => (
       <NumberInput source="active" />
       <TextInput source="name" />
       <TextInput source="email" />
+      <ImageInput source="profileImg" />
       <TextInput source="new_password" />
       <TextInput source="repeat_password" />
 
@@ -42,3 +51,13 @@ export const PlayerEdit = () => (
     </SimpleForm>
   </Edit>
 );
+
+export const PlayerShow = () => (
+  <Show>
+    <SimpleShowLayout>
+      <TextField source="name" />
+      <TextField source="email" />
+
+    </SimpleShowLayout>
+  </Show>
+)
