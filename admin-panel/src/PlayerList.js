@@ -15,7 +15,7 @@ import {
   RichTextField,
   EditButton,
   ImageField,
-  ImageInput
+  ImageInput,
 } from "react-admin";
 export const PlayerList = () => (
   <List>
@@ -41,7 +41,7 @@ export const PlayerEdit = () => (
       <NumberInput source="active" />
       <TextInput source="name" />
       <TextInput source="email" />
-      <ImageInput source="profileImg" />
+      <ImageInput source="profileImg" multiple={true} />
       <TextInput source="new_password" />
       <TextInput source="repeat_password" />
 
@@ -55,9 +55,9 @@ export const PlayerEdit = () => (
 export const PlayerShow = () => (
   <Show>
     <SimpleShowLayout>
+      <ImageField source="profileImg" />
       <TextField source="name" />
       <TextField source="email" />
-
     </SimpleShowLayout>
   </Show>
-)
+);

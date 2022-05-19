@@ -13,7 +13,7 @@
 
 import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
-
+import addUploadFeature from "./addUploadFeature";
 const apiUrl = "http://localhost:5000/api";
 const httpClient = (url, options = {}) => {
   if (!options.headers) {
@@ -24,7 +24,7 @@ const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
-export default {
+export default addUploadFeature({
   getList: (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
@@ -111,4 +111,4 @@ export default {
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));
   },
-};
+});

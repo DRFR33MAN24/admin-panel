@@ -131,7 +131,7 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 router.put("/:id", auth, async (req, res) => {
-  //console.log("update route called", req.body);
+  console.log("update route called", req);
   res.setHeader("Content-Type", "application/json");
   const { new_password, active, name, email } = req.body;
 
