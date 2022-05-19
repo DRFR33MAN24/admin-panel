@@ -41,7 +41,10 @@ export const PlayerEdit = () => (
       <NumberInput source="active" />
       <TextInput source="name" />
       <TextInput source="email" />
-      <ImageInput source="profileImg" multiple={true} />
+      <ImageInput source="profileImg">
+        <ImageField source="src" title="title" />
+      </ImageInput>
+
       <TextInput source="new_password" />
       <TextInput source="repeat_password" />
 

@@ -10,6 +10,7 @@ import {
 import { UserList } from "./UserList";
 import { PlayerList, PlayerEdit, PlayerShow } from "./PlayerList";
 import authProvider from "./authProvider";
+import addUploadFeature from "./addUploadFeature";
 import dataProvider from "./dataProvider";
 import LoginPage from "./LoginPage";
 import { Dashboard } from "./Dashboard";
@@ -25,7 +26,12 @@ const App = () => (
     authProvider={authProvider}
   >
     <Resource name="users" list={UserList} />
-    <Resource name="players" list={PlayerList} edit={PlayerEdit} show={PlayerShow} />
+    <Resource
+      name="players"
+      list={PlayerList}
+      edit={PlayerEdit}
+      show={PlayerShow}
+    />
   </Admin>
 );
 

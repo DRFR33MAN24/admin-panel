@@ -18,36 +18,37 @@ const convertFileToBase64 = (file) =>
  * the `picture` sent property, with `src` and `title` attributes.
  */
 const addUploadFeature = (requestHandler) => (type, resource, params) => {
-  // if (type === 'UPDATE' && resource === 'posts') {
-  // notice that following condition can be true only when `<ImageInput source="pictures" />` component has parameter `multiple={true}`
-  // if parameter `multiple` is false, then data.pictures is not an array, but single object
-  if (params.data.profileImg && params.data.profileImg.length) {
-    // only freshly dropped pictures are instance of File
-    const formerPictures = params.data.profileImg.filter(
-      (p) => !(p.rawFile instanceof File)
-    );
-    const newPictures = params.data.profileImg.filter(
-      (p) => p.rawFile instanceof File
-    );
+  console.log(type);
+  //   if (type === "UPDATE" && resource === "players") {
+  //     // notice that following condition can be true only when `<ImageInput source="pictures" />` component has parameter `multiple={true}`
+  //     // if parameter `multiple` is false, then data.pictures is not an array, but single object
+  //     if (params.data.profileImg && params.data.profileImg.length) {
+  //       // only freshly dropped pictures are instance of File
+  //       const formerPictures = params.data.profileImg.filter(
+  //         (p) => !(p.rawFile instanceof File)
+  //       );
+  //       const newPictures = params.data.profileImg.filter(
+  //         (p) => p.rawFile instanceof File
+  //       );
 
-    return Promise.all(newPictures.map(convertFileToBase64))
-      .then((base64Pictures) =>
-        base64Pictures.map((picture64, index) => ({
-          src: picture64,
-          title: `${newPictures[index].title}`,
-        }))
-      )
-      .then((transformedNewPictures) =>
-        requestHandler(type, resource, {
-          ...params,
-          data: {
-            ...params.data,
-            profileImg: [...transformedNewPictures, ...formerPictures],
-          },
-        })
-      );
-  }
-  //  }
+  //       return Promise.all(newPictures.map(convertFileToBase64))
+  //         .then((base64Pictures) =>
+  //           base64Pictures.map((picture64, index) => ({
+  //             src: picture64,
+  //             title: `${newPictures[index].title}`,
+  //           }))
+  //         )
+  //         .then((transformedNewPictures) =>
+  //           requestHandler(type, resource, {
+  //             ...params,
+  //             data: {
+  //               ...params.data,
+  //               profileImg: [...transformedNewPictures, ...formerPictures],
+  //             },
+  //           })
+  //         );
+  //     }
+  //   }
   // for other request types and resources, fall back to the default request handler
   return requestHandler(type, resource, params);
 };

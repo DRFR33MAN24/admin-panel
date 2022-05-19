@@ -24,7 +24,7 @@ const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
-export default addUploadFeature({
+export default {
   getList: (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
@@ -81,11 +81,13 @@ export default addUploadFeature({
       data: { ...params.data, id: json.id },
     })),
 
-  update: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+  update: (resource, params) => {
+    console.log(params);
+    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json })),
+    }).then(({ json }) => ({ data: json }));
+  },
 
   updateMany: (resource, params) => {
     const query = {
@@ -111,4 +113,4 @@ export default addUploadFeature({
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));
   },
-});
+};
