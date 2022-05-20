@@ -81,13 +81,13 @@ export default {
       data: { ...params.data, id: json.id },
     })),
 
-  update: (resource, params) => {
-    console.log(params);
+  update: addUploadFeature((resource, params) => {
+    //console.log(params);
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));
-  },
+  }),
 
   updateMany: (resource, params) => {
     const query = {

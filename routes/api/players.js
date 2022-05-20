@@ -3,7 +3,9 @@ const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-
+const fs = require("fs");
+const multer = require("multer");
+const upload = multer();
 const auth = require("../../middleware/auth");
 // Player Model
 
@@ -130,8 +132,15 @@ router.get("/:id", auth, async (req, res) => {
   //   .then(user => res.json(user));
 });
 
-router.put("/:id", auth, async (req, res) => {
-  console.log("update route called", req);
+router.put("/:id", [auth, upload.any()], async (req, res) => {
+  console.log("update route called", req.profileImg);
+  // var data = req.body.profileImg[1].src.replace(/^data:image\/\w+;base64,/, "");
+  // var buf = Buffer.from(data, "base64");
+  // fs.writeFile(__dirname + "/image.jpg", req.body.profileImg[1].src, (err) => {
+  //   if (err) throw err;
+  //   console.log("Saved!");
+  // });
+
   res.setHeader("Content-Type", "application/json");
   const { new_password, active, name, email } = req.body;
 
