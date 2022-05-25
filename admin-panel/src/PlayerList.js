@@ -41,7 +41,7 @@ export const PlayerEdit = () => (
       <NumberInput source="active" />
       <TextInput source="name" />
       <TextInput source="email" />
-      <ImageInput source="profileImg" multiple={true}>
+      <ImageInput source="pictures" multiple={true} accept="image/png">
         <ImageField source="src" title="title" />
       </ImageInput>
 

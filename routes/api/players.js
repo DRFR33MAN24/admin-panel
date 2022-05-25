@@ -133,7 +133,7 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 router.put("/:id", [auth, upload.any()], async (req, res) => {
-  console.log("update route called", req.profileImg);
+  console.log("update route called", req.files, req.file, req.body);
   // var data = req.body.profileImg[1].src.replace(/^data:image\/\w+;base64,/, "");
   // var buf = Buffer.from(data, "base64");
   // fs.writeFile(__dirname + "/image.jpg", req.body.profileImg[1].src, (err) => {

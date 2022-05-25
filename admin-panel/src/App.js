@@ -11,7 +11,7 @@ import { UserList } from "./UserList";
 import { PlayerList, PlayerEdit, PlayerShow } from "./PlayerList";
 import authProvider from "./authProvider";
 import addUploadFeature from "./addUploadFeature";
-import dataProvider from "./dataProvider";
+
 import LoginPage from "./LoginPage";
 import { Dashboard } from "./Dashboard";
 //import jsonServerProvider from "ra-data-json-server";
@@ -22,7 +22,7 @@ const App = () => (
   <Admin
     dashboard={Dashboard}
     loginPage={LoginPage}
-    dataProvider={dataProvider}
+    dataProvider={addUploadFeature}
     authProvider={authProvider}
   >
     <Resource name="users" list={UserList} />

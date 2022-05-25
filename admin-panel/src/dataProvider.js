@@ -13,7 +13,7 @@
 
 import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
-import addUploadFeature from "./addUploadFeature";
+
 const apiUrl = "http://localhost:5000/api";
 const httpClient = (url, options = {}) => {
   if (!options.headers) {
@@ -81,13 +81,13 @@ export default {
       data: { ...params.data, id: json.id },
     })),
 
-  update: addUploadFeature((resource, params) => {
-    //console.log(params);
+  update: (resource, params) => {
+    console.log(params);
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));
-  }),
+  },
 
   updateMany: (resource, params) => {
     const query = {
