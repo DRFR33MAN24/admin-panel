@@ -7,6 +7,7 @@ const fs = require("fs");
 const multer = require("multer");
 const upload = multer();
 const auth = require("../../middleware/auth");
+const { uuid } = require("uuidv4");
 // Player Model
 
 const Player = require("../../models/Player");
@@ -132,28 +133,35 @@ router.get("/:id", auth, async (req, res) => {
   //   .then(user => res.json(user));
 });
 
-router.put("/:id", [auth, upload.any()], async (req, res) => {
-  console.log("update route called", req.files, req.file, req.body);
-  // var data = req.body.profileImg[1].src.replace(/^data:image\/\w+;base64,/, "");
-  // var buf = Buffer.from(data, "base64");
-  // fs.writeFile(__dirname + "/image.jpg", req.body.profileImg[1].src, (err) => {
-  //   if (err) throw err;
-  //   console.log("Saved!");
-  // });
+router.put("/:id", auth, async (req, res) => {
+  console.log("update route called");
+  const { new_password, active, name, email, pictures } = req.body;
+  console.log(pictures[0]);
+  let imageHash = "";
+  if (pictures.length !== 0) {
+    imageHash = uuid();
+    // var data = pictures[0].src.replace(/^data:image\/\w+;base64,/, "");
+    var data = pictures[0].src.split(";base64,").pop();
+    var buf = Buffer.from(data, "base64");
+    // let fileName = pictures[0].rawFile.name;
+    fs.writeFile(imageHash, buf, function (err) {
+      console.log("File created");
+    });
+  }
 
   res.setHeader("Content-Type", "application/json");
-  const { new_password, active, name, email } = req.body;
 
   bcryptjs.genSalt(10, (err, salt) => {
     bcryptjs.hash(new_password, salt, async (err, hash) => {
       if (err) throw err;
-
+      console.log("updating record");
       await Player.update(
         {
           password: hash,
           name: name,
           active: active,
           email: email,
+          profileImg: imageHash,
         },
         {
           where: { id: req.params.id },

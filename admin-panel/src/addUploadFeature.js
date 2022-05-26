@@ -3,7 +3,7 @@ import dataProvider from "./dataProvider";
 const addUploadFeature = {
   ...dataProvider,
   update: (resource, params) => {
-    if (resource !== "players") {
+    if (resource !== "players" || params.data.pictures === undefined) {
       // fallback to the default implementation
       return dataProvider.update(resource, params);
     }
