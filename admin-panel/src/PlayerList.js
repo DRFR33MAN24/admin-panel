@@ -17,11 +17,12 @@ import {
   ImageField,
   ImageInput,
 } from "react-admin";
+import { CustomImageField } from "./CustomImageField";
 export const PlayerList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <ImageField source="profileImg" />
+      <CustomImageField source="profileImg" />
       <NumberField source="active" />
       <TextField source="name" />
       <EmailField source="email" />
@@ -42,7 +43,7 @@ export const PlayerEdit = () => (
       <TextInput source="name" />
       <TextInput source="email" />
       <ImageInput source="pictures" multiple={true} accept="image/png">
-        <ImageField source="src" title="title" />
+        <ImageField source="src" title="profile image" />
       </ImageInput>
 
       <TextInput source="new_password" />

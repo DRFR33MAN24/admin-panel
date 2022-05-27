@@ -134,9 +134,14 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 router.put("/:id", auth, async (req, res) => {
-  console.log("update route called", req.params);
+  // console.log("update route called", req.params);
   const { new_password, active, name, email, pictures } = req.body;
-
+  let player = await Player.findOne({
+    where: { id: req.params.id },
+    raw: true,
+    plain: true,
+  });
+  console.log(player);
   let imageHash = "";
   if (pictures !== undefined) {
     imageHash = uuid();
@@ -145,7 +150,12 @@ router.put("/:id", auth, async (req, res) => {
     var buf = Buffer.from(data, "base64");
     // let fileName = pictures[0].rawFile.name;
     fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
-      console.log("File created");
+      console.log("Image created");
+
+      fs.unlink(__dirname + "/public/" + player.profileImg, (err) => {
+        if (err) throw err; //handle your error the way you want to;
+        console.log("Image was deleted"); //or else the file will be deleted
+      });
     });
   }
 
@@ -154,7 +164,7 @@ router.put("/:id", auth, async (req, res) => {
   bcryptjs.genSalt(10, (err, salt) => {
     bcryptjs.hash(new_password, salt, async (err, hash) => {
       if (err) throw err;
-      console.log("updating record", req.params.id);
+      // console.log("updating record", req.params.id);
       await Player.update(
         {
           password: hash,

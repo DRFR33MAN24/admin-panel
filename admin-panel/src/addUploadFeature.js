@@ -31,6 +31,7 @@ const addUploadFeature = {
       )
       .then((transformedNewPictures) =>
         dataProvider.update(resource, {
+          ...params,
           data: {
             ...params.data,
             pictures: [...transformedNewPictures, ...formerPictures],
