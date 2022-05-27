@@ -89,11 +89,10 @@ router.post("/register", async (req, res) => {
   });
 });
 
-router.post('/', auth, async (req, res) => {
+router.post("/", auth, async (req, res) => {
   console.log(req.body);
   let { name, email, active, password } = req.body;
   res.status(200).end(JSON.stringify(req.body));
-
 });
 
 router.get("/", auth, async (req, res) => {
@@ -128,9 +127,9 @@ router.get("/:id", auth, async (req, res) => {
     plain: true,
   });
   console.log("player", player);
-  if (!player) {
-    return res.status(404).end('not found');
 
+  if (!player) {
+    return res.status(404).json({ msg: "Not Found" });
   }
   if (player.active === false) {
     return res
@@ -145,30 +144,39 @@ router.get("/:id", auth, async (req, res) => {
   //   .then(user => res.json(user));
 });
 
+export const saveProfileImage = (pictures, oldImage) => {
+  let imageHash = uuid();
+  // var data = pictures[0].src.replace(/^data:image\/\w+;base64,/, "");
+  var data = pictures[0].src.split(";base64,").pop();
+  var buf = Buffer.from(data, "base64");
+  // let fileName = pictures[0].rawFile.name;
+  fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
+    console.log("Image created");
+    if (oldImage !== "") {
+      fs.unlink(__dirname + "/public/" + oldImage, (err) => {
+        if (err) {
+          console.log(err);
+          return;
+        } //handle your error the way you want to;
+        console.log("Image was deleted"); //or else the file will be deleted
+      });
+    }
+  });
+  return imageHash;
+};
 router.put("/:id", auth, async (req, res) => {
   // console.log("update route called", req.params);
   const { new_password, active, name, email, pictures } = req.body;
+
   let player = await Player.findOne({
     where: { id: req.params.id },
     raw: true,
     plain: true,
   });
-  console.log(player);
+  //console.log(player);
   let imageHash = "";
   if (pictures !== undefined) {
-    imageHash = uuid();
-    // var data = pictures[0].src.replace(/^data:image\/\w+;base64,/, "");
-    var data = pictures[0].src.split(";base64,").pop();
-    var buf = Buffer.from(data, "base64");
-    // let fileName = pictures[0].rawFile.name;
-    fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
-      console.log("Image created");
-
-      fs.unlink(__dirname + "/public/" + player.profileImg, (err) => {
-        if (err) console.log(err);; //handle your error the way you want to;
-        console.log("Image was deleted"); //or else the file will be deleted
-      });
-    });
+    imageHash = saveProfileImage(pictures);
   }
 
   res.setHeader("Content-Type", "application/json");
