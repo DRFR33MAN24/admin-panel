@@ -6,9 +6,10 @@ import {
   ListGuesser,
   EditGuesser,
   ShowGuesser,
+
 } from "react-admin";
 import { UserList } from "./UserList";
-import { PlayerList, PlayerEdit, PlayerShow } from "./PlayerList";
+import { PlayerList, PlayerEdit, PlayerShow, PlayerCreate } from "./PlayerList";
 import authProvider from "./authProvider";
 import addUploadFeature from "./addUploadFeature";
 
@@ -31,6 +32,7 @@ const App = () => (
       list={PlayerList}
       edit={PlayerEdit}
       show={PlayerShow}
+      create={PlayerCreate}
     />
   </Admin>
 );

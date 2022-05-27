@@ -89,6 +89,13 @@ router.post("/register", async (req, res) => {
   });
 });
 
+router.post('/', auth, async (req, res) => {
+  console.log(req.body);
+  let { name, email, active, password } = req.body;
+  res.status(200).end(JSON.stringify(req.body));
+
+});
+
 router.get("/", auth, async (req, res) => {
   const parsedQuery = parseQuery(req.query);
   // console.log(parsedQuery);
@@ -113,13 +120,18 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/:id", auth, async (req, res) => {
+  console.log("getting a record", req.params);
   let player = await Player.findAll({
     where: {
       id: req.params.id,
     },
     plain: true,
   });
+  console.log("player", player);
+  if (!player) {
+    return res.status(404).end('not found');
 
+  }
   if (player.active === false) {
     return res
       .status(400)
@@ -153,7 +165,7 @@ router.put("/:id", auth, async (req, res) => {
       console.log("Image created");
 
       fs.unlink(__dirname + "/public/" + player.profileImg, (err) => {
-        if (err) throw err; //handle your error the way you want to;
+        if (err) console.log(err);; //handle your error the way you want to;
         console.log("Image was deleted"); //or else the file will be deleted
       });
     });

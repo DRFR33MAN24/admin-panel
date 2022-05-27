@@ -1,6 +1,7 @@
 import {
   List,
   Edit,
+  Create,
   Datagrid,
   NumberField,
   TextField,
@@ -55,7 +56,26 @@ export const PlayerEdit = () => (
     </SimpleForm>
   </Edit>
 );
+export const PlayerCreate = () => (
+  <Create>
+    <SimpleForm>
+      <TextInput source="id" />
+      <NumberInput source="active" />
+      <TextInput source="name" />
+      <TextInput source="email" />
+      <ImageInput source="pictures" multiple={true} accept="image/png">
+        <ImageField source="src" title="profile image" />
+      </ImageInput>
 
+      <TextInput source="password" />
+      <TextInput source="repeat_password" />
+
+      <DateInput source="register_date" />
+      <DateInput source="createdAt" />
+      <DateInput source="updatedAt" />
+    </SimpleForm>
+  </Create>
+);
 export const PlayerShow = () => (
   <Show>
     <SimpleShowLayout>
