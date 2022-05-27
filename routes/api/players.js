@@ -134,17 +134,17 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 router.put("/:id", auth, async (req, res) => {
-  console.log("update route called");
+  console.log("update route called", req.params);
   const { new_password, active, name, email, pictures } = req.body;
-  console.log(pictures[0]);
+
   let imageHash = "";
-  if (pictures.length !== 0) {
+  if (pictures !== undefined) {
     imageHash = uuid();
     // var data = pictures[0].src.replace(/^data:image\/\w+;base64,/, "");
     var data = pictures[0].src.split(";base64,").pop();
     var buf = Buffer.from(data, "base64");
     // let fileName = pictures[0].rawFile.name;
-    fs.writeFile(imageHash, buf, function (err) {
+    fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
       console.log("File created");
     });
   }
@@ -154,7 +154,7 @@ router.put("/:id", auth, async (req, res) => {
   bcryptjs.genSalt(10, (err, salt) => {
     bcryptjs.hash(new_password, salt, async (err, hash) => {
       if (err) throw err;
-      console.log("updating record");
+      console.log("updating record", req.params.id);
       await Player.update(
         {
           password: hash,
