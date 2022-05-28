@@ -173,6 +173,9 @@ router.put("/:id", auth, async (req, res) => {
   if (pictures !== undefined) {
     imageHash = saveProfileImage(pictures, player.profileImg);
   }
+  else {
+    imageHash = player.profileImg;
+  }
 
   let salt = await bcryptjs.genSalt(10);
   let hash = await bcryptjs.hash(new_password, salt);
