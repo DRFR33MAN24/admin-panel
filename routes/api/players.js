@@ -3,15 +3,13 @@ const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const multer = require("multer");
-const upload = multer();
+
 const auth = require("../../middleware/auth");
-const { uuid } = require("uuidv4");
+
 // Player Model
 
 const Player = require("../../models");
-const { parseQuery } = require("../../utility");
+const { parseQuery, saveProfileImage } = require("../../utility");
 
 // @route POST api/users
 // @desc Register New User
@@ -137,27 +135,6 @@ router.get("/:id", auth, async (req, res) => {
   //   .select("-password")
   //   .then(user => res.json(user));
 });
-
-const saveProfileImage = (pictures, oldImage) => {
-  let imageHash = uuid();
-
-  var data = pictures[0].src.split(";base64,").pop();
-  var buf = Buffer.from(data, "base64");
-
-  fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
-    console.log("Image created");
-    if (oldImage !== "") {
-      fs.unlink(__dirname + "/public/" + oldImage, (err) => {
-        if (err) {
-          console.log(err);
-          return;
-        } //handle your error the way you want to;
-        console.log("Image was deleted"); //or else the file will be deleted
-      });
-    }
-  });
-  return imageHash;
-};
 
 router.put("/:id", auth, async (req, res) => {
   console.log("update route called");

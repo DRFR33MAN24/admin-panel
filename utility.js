@@ -1,5 +1,5 @@
 const mapValues = require("lodash/mapValues");
-
+const fs = require("fs");
 const getFilter = (filter, filtersOption) =>
   mapValues(filter, (value, key) => {
     if (filtersOption && filtersOption[key]) {
@@ -22,4 +22,25 @@ const parseQuery = (query, filtersOption) => {
     q,
   };
 };
-module.exports = { getFilter, parseQuery };
+
+const saveProfileImage = (pictures, oldImage) => {
+  let imageHash = uuid();
+
+  var data = pictures[0].src.split(";base64,").pop();
+  var buf = Buffer.from(data, "base64");
+
+  fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
+    console.log("Image created");
+    if (oldImage !== "") {
+      fs.unlink(__dirname + "/public/" + oldImage, (err) => {
+        if (err) {
+          console.log(err);
+          return;
+        } //handle your error the way you want to;
+        console.log("Image was deleted"); //or else the file will be deleted
+      });
+    }
+  });
+  return imageHash;
+};
+module.exports = { getFilter, parseQuery, saveProfileImage };
