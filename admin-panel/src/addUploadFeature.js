@@ -1,14 +1,18 @@
 import jsonServerProvider from "ra-data-json-server";
 import dataProvider from "./dataProvider";
 
-const addFilesToRequest = (resource, params) => {
-  console.log(params);
+const addFilesToRequest = type => (resource, params) => {
+  console.log(type);
   if (resource !== "players" || params.data.pictures === undefined) {
     // fallback to the default implementation
-    return dataProvider.update(resource, params);
+    if (type === "update") {
+
+      return dataProvider.update(resource, params);
+    }
+    return dataProvider.create(resource, params);
   }
 
-  console.log(params.data.pictures);
+  //console.log(params.data.pictures);
   /**
    * For posts update only, convert uploaded image in base 64 and attach it to
    * the `picture` sent property, with `src` and `title` attributes.
@@ -28,21 +32,32 @@ const addFilesToRequest = (resource, params) => {
         title: `${params.data.title}`,
       }))
     )
-    .then((transformedNewPictures) =>
-      dataProvider.update(resource, {
+    .then((transformedNewPictures) => {
+      if (type === 'update') {
+
+        return dataProvider.update(resource, {
+          ...params,
+          data: {
+            ...params.data,
+            pictures: [...transformedNewPictures, ...formerPictures],
+          },
+        })
+      }
+      return dataProvider.create(resource, {
         ...params,
         data: {
           ...params.data,
           pictures: [...transformedNewPictures, ...formerPictures],
         },
       })
+    }
     );
 };
 
 const addUploadFeature = {
   ...dataProvider,
-  update: addFilesToRequest,
-  create: addFilesToRequest,
+  update: addFilesToRequest("update"),
+  create: addFilesToRequest("create"),
 };
 
 /**

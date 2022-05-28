@@ -113,14 +113,14 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/:id", auth, async (req, res) => {
-  console.log("getting a record", req.params);
+  console.log("getting a record");
   let player = await Player.findAll({
     where: {
       id: req.params.id,
     },
     plain: true,
   });
-  console.log("player", player);
+  //console.log("player", player);
 
   if (!player) {
     return res.status(404).json({ msg: "Not Found" });
@@ -160,7 +160,7 @@ const saveProfileImage = (pictures, oldImage) => {
 };
 
 router.put("/:id", auth, async (req, res) => {
-  console.log("update route called", req.params);
+  console.log("update route called");
   const { new_password, active, name, email, pictures } = req.body;
 
   let player = await Player.findOne({
@@ -191,9 +191,11 @@ router.put("/:id", auth, async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(req.body));
 });
+
+
 router.post("/", auth, async (req, res) => {
   console.log("create route called");
-  const { new_password, active, name, email, pictures } = req.body;
+  const { password, active, name, email, pictures } = req.body;
 
   let imageHash = "";
   if (pictures !== undefined) {
@@ -201,17 +203,14 @@ router.post("/", auth, async (req, res) => {
   }
 
   let salt = await bcryptjs.genSalt(10);
-  let hash = await bcryptjs.hash(new_password, salt);
-  await Player.update(
+  let hash = await bcryptjs.hash(password, salt);
+  await Player.create(
     {
       password: hash,
       name: name,
       active: active,
       email: email,
       profileImg: imageHash,
-    },
-    {
-      where: { id: req.params.id },
     }
   );
   res.setHeader("Content-Type", "application/json");
