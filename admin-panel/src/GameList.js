@@ -17,8 +17,25 @@ import {
   EditButton,
   ImageField,
   ImageInput,
+  useListContext,
 } from "react-admin";
+import { Stack, Typography } from "@mui/material";
+
 import { CustomImageField } from "./CustomImageField";
+
+const GamesList = () => {
+  const { data } = useListContext();
+  return (
+    <Stack spacing={2} sx={{ padding: 2 }}>
+      {data.map((book) => (
+        <Typography key={book.id}>
+          <i>{book.title}</i>, by {book.author} ({book.year})
+        </Typography>
+      ))}
+    </Stack>
+  );
+};
+
 export const GameList = () => (
   <List>
     <Datagrid rowClick="show">
