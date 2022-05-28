@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const auth = require("../../middleware/auth");
 // User Model
-const User = require("../../models/index");
+const User = require("../../models");
 const { parseQuery } = require("../../utility");
 
 // @route POST api/users

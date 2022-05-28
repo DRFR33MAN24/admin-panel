@@ -10,7 +10,7 @@ const auth = require("../../middleware/auth");
 const { uuid } = require("uuidv4");
 // Player Model
 
-const Player = require("../../models/index");
+const Player = require("../../models");
 const { parseQuery } = require("../../utility");
 
 // @route POST api/users
