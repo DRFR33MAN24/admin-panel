@@ -89,12 +89,6 @@ router.post("/register", async (req, res) => {
   });
 });
 
-router.post("/", auth, async (req, res) => {
-  console.log(req.body);
-  let { name, email, active, password } = req.body;
-  res.status(200).end(JSON.stringify(req.body));
-});
-
 router.get("/", auth, async (req, res) => {
   const parsedQuery = parseQuery(req.query);
   // console.log(parsedQuery);
@@ -144,12 +138,12 @@ router.get("/:id", auth, async (req, res) => {
   //   .then(user => res.json(user));
 });
 
-export const saveProfileImage = (pictures, oldImage) => {
+const saveProfileImage = (pictures, oldImage) => {
   let imageHash = uuid();
-  // var data = pictures[0].src.replace(/^data:image\/\w+;base64,/, "");
+
   var data = pictures[0].src.split(";base64,").pop();
   var buf = Buffer.from(data, "base64");
-  // let fileName = pictures[0].rawFile.name;
+
   fs.writeFile(__dirname + "/public/" + imageHash, buf, function (err) {
     console.log("Image created");
     if (oldImage !== "") {
@@ -164,8 +158,9 @@ export const saveProfileImage = (pictures, oldImage) => {
   });
   return imageHash;
 };
+
 router.put("/:id", auth, async (req, res) => {
-  // console.log("update route called", req.params);
+  console.log("update route called", req.params);
   const { new_password, active, name, email, pictures } = req.body;
 
   let player = await Player.findOne({
@@ -176,30 +171,51 @@ router.put("/:id", auth, async (req, res) => {
   //console.log(player);
   let imageHash = "";
   if (pictures !== undefined) {
-    imageHash = saveProfileImage(pictures);
+    imageHash = saveProfileImage(pictures, player.profileImg);
   }
 
+  let salt = await bcryptjs.genSalt(10);
+  let hash = await bcryptjs.hash(new_password, salt);
+  await Player.update(
+    {
+      password: hash,
+      name: name,
+      active: active,
+      email: email,
+      profileImg: imageHash,
+    },
+    {
+      where: { id: req.params.id },
+    }
+  );
   res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(req.body));
+});
+router.post("/", auth, async (req, res) => {
+  console.log("create route called");
+  const { new_password, active, name, email, pictures } = req.body;
 
-  bcryptjs.genSalt(10, (err, salt) => {
-    bcryptjs.hash(new_password, salt, async (err, hash) => {
-      if (err) throw err;
-      // console.log("updating record", req.params.id);
-      await Player.update(
-        {
-          password: hash,
-          name: name,
-          active: active,
-          email: email,
-          profileImg: imageHash,
-        },
-        {
-          where: { id: req.params.id },
-        }
-      );
-    });
-    res.end(JSON.stringify(req.body));
-  });
+  let imageHash = "";
+  if (pictures !== undefined) {
+    imageHash = saveProfileImage(pictures, "");
+  }
+
+  let salt = await bcryptjs.genSalt(10);
+  let hash = await bcryptjs.hash(new_password, salt);
+  await Player.update(
+    {
+      password: hash,
+      name: name,
+      active: active,
+      email: email,
+      profileImg: imageHash,
+    },
+    {
+      where: { id: req.params.id },
+    }
+  );
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(req.body));
 });
 
 module.exports = router;
