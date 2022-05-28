@@ -9,7 +9,7 @@ const multer = require("multer");
 //const axios = require("axios");
 
 // User Model
-const User = require("../../models/User");
+const User = require("../../models/index");
 const fs = require("fs");
 const path = require("path");
 const glob = require("glob");

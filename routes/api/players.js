@@ -10,7 +10,7 @@ const auth = require("../../middleware/auth");
 const { uuid } = require("uuidv4");
 // Player Model
 
-const Player = require("../../models/Player");
+const Player = require("../../models/index");
 const { parseQuery } = require("../../utility");
 
 // @route POST api/users
@@ -172,8 +172,7 @@ router.put("/:id", auth, async (req, res) => {
   let imageHash = "";
   if (pictures !== undefined) {
     imageHash = saveProfileImage(pictures, player.profileImg);
-  }
-  else {
+  } else {
     imageHash = player.profileImg;
   }
 
@@ -195,7 +194,6 @@ router.put("/:id", auth, async (req, res) => {
   res.end(JSON.stringify(req.body));
 });
 
-
 router.post("/", auth, async (req, res) => {
   console.log("create route called");
   const { password, active, name, email, pictures } = req.body;
@@ -207,15 +205,13 @@ router.post("/", auth, async (req, res) => {
 
   let salt = await bcryptjs.genSalt(10);
   let hash = await bcryptjs.hash(password, salt);
-  await Player.create(
-    {
-      password: hash,
-      name: name,
-      active: active,
-      email: email,
-      profileImg: imageHash,
-    }
-  );
+  await Player.create({
+    password: hash,
+    name: name,
+    active: active,
+    email: email,
+    profileImg: imageHash,
+  });
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(req.body));
 });
