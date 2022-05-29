@@ -20,7 +20,11 @@ import {
   useListContext,
 } from "react-admin";
 import { Box, Paper } from "@mui/material";
-
+const styles = {
+  gameContainer: {
+    backgroundImage: `url(https://picsum.photos/64)`,
+  },
+};
 export const Games = () => {
   const { data } = useListContext();
   console.log(data);
@@ -37,7 +41,7 @@ export const Games = () => {
       }}
     >
       {data.map((game) => (
-        <Paper>
+        <Paper style={styles.gameContainer}>
           {game.id}
           {game.name}
         </Paper>
