@@ -18,16 +18,20 @@ import {
   ImageField,
   ImageInput,
   useListContext,
+  useRedirect,
 } from "react-admin";
+
 import { Box, Paper } from "@mui/material";
 const styles = {
   gameContainer: {
-    backgroundImage: `url(https://picsum.photos/64)`,
+    backgroundImage: `url(http://localhost:5000/618b4a3c-b838-433f-82f5-92728f1e10de)`,
   },
 };
 export const Games = () => {
   const { data } = useListContext();
   console.log(data);
+  const redirect = useRedirect();
+
   return (
     <Box
       sx={{
@@ -41,7 +45,10 @@ export const Games = () => {
       }}
     >
       {data.map((game) => (
-        <Paper style={styles.gameContainer}>
+        <Paper
+          style={styles.gameContainer}
+          onClick={() => redirect(`http://localhost:3000/#/games/${game.id}`)}
+        >
           {game.id}
           {game.name}
         </Paper>
