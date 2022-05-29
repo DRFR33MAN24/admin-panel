@@ -1,12 +1,10 @@
 import jsonServerProvider from "ra-data-json-server";
 import dataProvider from "./dataProvider";
 
-const addFilesToRequest = type => (resource, params) => {
-  console.log(type);
+const addFilesToRequest = (type) => (resource, params) => {
   if (resource !== "players" || params.data.pictures === undefined) {
     // fallback to the default implementation
     if (type === "update") {
-
       return dataProvider.update(resource, params);
     }
     return dataProvider.create(resource, params);
@@ -33,15 +31,14 @@ const addFilesToRequest = type => (resource, params) => {
       }))
     )
     .then((transformedNewPictures) => {
-      if (type === 'update') {
-
+      if (type === "update") {
         return dataProvider.update(resource, {
           ...params,
           data: {
             ...params.data,
             pictures: [...transformedNewPictures, ...formerPictures],
           },
-        })
+        });
       }
       return dataProvider.create(resource, {
         ...params,
@@ -49,9 +46,8 @@ const addFilesToRequest = type => (resource, params) => {
           ...params.data,
           pictures: [...transformedNewPictures, ...formerPictures],
         },
-      })
-    }
-    );
+      });
+    });
 };
 
 const addUploadFeature = {

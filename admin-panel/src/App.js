@@ -6,10 +6,10 @@ import {
   ListGuesser,
   EditGuesser,
   ShowGuesser,
-
 } from "react-admin";
 import { UserList } from "./UserList";
 import { PlayerList, PlayerEdit, PlayerShow, PlayerCreate } from "./PlayerList";
+import { GameList } from "./GameList";
 import authProvider from "./authProvider";
 import addUploadFeature from "./addUploadFeature";
 
@@ -27,6 +27,7 @@ const App = () => (
     authProvider={authProvider}
   >
     <Resource name="users" list={UserList} />
+    <Resource name="games" list={GameList} />
     <Resource
       name="players"
       list={PlayerList}

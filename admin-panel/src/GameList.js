@@ -19,37 +19,36 @@ import {
   ImageInput,
   useListContext,
 } from "react-admin";
-import { Stack, Typography } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 
-import { CustomImageField } from "./CustomImageField";
-
-const GamesList = () => {
+export const Games = () => {
   const { data } = useListContext();
+  console.log(data);
   return (
-    <Stack spacing={2} sx={{ padding: 2 }}>
-      {data.map((book) => (
-        <Typography key={book.id}>
-          <i>{book.title}</i>, by {book.author} ({book.year})
-        </Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        "& > :not(style)": {
+          m: 1,
+          width: 128,
+          height: 128,
+        },
+      }}
+    >
+      {data.map((game) => (
+        <Paper>
+          {game.id}
+          {game.name}
+        </Paper>
       ))}
-    </Stack>
+    </Box>
   );
 };
 
 export const GameList = () => (
-  <List>
-    <Datagrid rowClick="show">
-      <TextField source="id" />
-      <CustomImageField source="profileImg" />
-      <NumberField source="active" />
-      <TextField source="name" />
-      <EmailField source="email" />
-
-      <DateField source="register_date" />
-      <DateField source="createdAt" />
-      <DateField source="updatedAt" />
-      <EditButton />
-    </Datagrid>
+  <List emptyWhileLoading>
+    <Games />
   </List>
 );
 

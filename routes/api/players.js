@@ -8,7 +8,7 @@ const auth = require("../../middleware/auth");
 
 // Player Model
 
-const Player = require("../../models");
+const { Player } = require("../../models");
 const { parseQuery, saveProfileImage } = require("../../utility");
 
 // @route POST api/users

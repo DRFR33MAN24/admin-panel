@@ -26,6 +26,7 @@ const httpClient = (url, options = {}) => {
 
 export default {
   getList: (resource, params) => {
+    console.log("getList called", resource);
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     const query = {

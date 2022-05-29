@@ -3,7 +3,7 @@ const router = express.Router();
 
 const auth = require("../../middleware/auth");
 
-const Game = require("../../models");
+const { Game } = require("../../models");
 const { parseQuery, saveProfileImage } = require("../../utility");
 
 router.get("/", auth, async (req, res) => {
