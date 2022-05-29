@@ -16,6 +16,11 @@ const Game = db.define(
       allowNull: false,
       // allowNull defaults to true
     },
+    gameImage: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // allowNull defaults to true
+    },
   },
   {
     // Other model options go here

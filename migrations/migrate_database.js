@@ -5,8 +5,9 @@ const jwt = require("jsonwebtoken");
 
 const auth = require("../middleware/auth");
 // User Model
-const User = require("../models/User");
-const Player = require("../models/Player");
+const User = require("../models");
+const Player = require("../models");
+const Game = require("../models");
 
 const migarateUsers = () => {
   const users = [

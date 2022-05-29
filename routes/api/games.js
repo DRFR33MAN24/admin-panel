@@ -3,14 +3,12 @@ const router = express.Router();
 
 const auth = require("../../middleware/auth");
 
-// Player Model
-
 const Game = require("../../models");
 const { parseQuery, saveProfileImage } = require("../../utility");
 
 router.get("/", auth, async (req, res) => {
   const parsedQuery = parseQuery(req.query);
-  // console.log(parsedQuery);
+
   let games = await Game.findAll({
     where: parseQuery.filter,
     order: parsedQuery.order,
@@ -43,7 +41,7 @@ router.get("/:id", auth, async (req, res) => {
 
 router.put("/:id", auth, async (req, res) => {
   console.log("update route called");
-  const { new_password, active, name, email, pictures } = req.body;
+  const { name, pictures } = req.body;
 
   let game = await Game.findOne({
     where: { id: req.params.id },
@@ -53,20 +51,16 @@ router.put("/:id", auth, async (req, res) => {
   //console.log(player);
   let imageHash = "";
   if (pictures !== undefined) {
-    imageHash = saveProfileImage(pictures, game.profileImg);
+    imageHash = saveProfileImage(pictures, game.gameImage);
   } else {
-    imageHash = player.profileImg;
+    imageHash = game.gameImage;
   }
 
-  let salt = await bcryptjs.genSalt(10);
-  let hash = await bcryptjs.hash(new_password, salt);
   await Game.update(
     {
-      password: hash,
       name: name,
-      active: active,
-      email: email,
-      profileImg: imageHash,
+
+      gameImage: imageHash,
     },
     {
       where: { id: req.params.id },
@@ -78,20 +72,16 @@ router.put("/:id", auth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   console.log("create route called");
-  const { password, active, name, email, pictures } = req.body;
+  const { name, pictures } = req.body;
 
   let imageHash = "";
   if (pictures !== undefined) {
     imageHash = saveProfileImage(pictures, "");
   }
 
-  let salt = await bcryptjs.genSalt(10);
-  let hash = await bcryptjs.hash(password, salt);
   await Game.create({
-    password: hash,
     name: name,
-    active: active,
-    email: email,
+
     profileImg: imageHash,
   });
   res.setHeader("Content-Type", "application/json");
