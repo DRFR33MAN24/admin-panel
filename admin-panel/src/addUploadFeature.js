@@ -2,7 +2,7 @@ import jsonServerProvider from "ra-data-json-server";
 import dataProvider from "./dataProvider";
 
 const addFilesToRequest = (type) => (resource, params) => {
-  if (resource !== "players" || params.data.pictures === undefined) {
+  if (params.data.pictures === undefined) {
     // fallback to the default implementation
     if (type === "update") {
       return dataProvider.update(resource, params);

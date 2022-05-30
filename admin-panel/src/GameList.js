@@ -24,7 +24,7 @@ import {
 import { Box, Paper } from "@mui/material";
 const styles = {
   gameContainer: {
-    backgroundImage: `url(http://localhost:5000/618b4a3c-b838-433f-82f5-92728f1e10de)`,
+    backgroundImage: `url(http://localhost:5000/logo192.png)`,
   },
 };
 export const Games = () => {
@@ -46,7 +46,9 @@ export const Games = () => {
     >
       {data.map((game) => (
         <Paper
-          style={styles.gameContainer}
+          style={{
+            backgroundImage: `url(http://localhost:5000/${game.gameImage})`,
+          }}
           onClick={() => redirect(`http://localhost:3000/#/games/${game.id}`)}
         >
           {game.id}

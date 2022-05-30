@@ -25,7 +25,7 @@ app.use("/api/players", require("./routes/api/players"));
 app.use("/api/games", require("./routes/api/games"));
 app.use("/api/auth", require("./routes/api/auth"));
 
-app.use(express.static("public/"));
+app.use(express.static("public"));
 app.use(express.static("app"));
 
 /* GET React App */
