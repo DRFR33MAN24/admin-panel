@@ -79,8 +79,9 @@ export const PlayerCreate = () => (
 export const PlayerShow = () => (
   <Show>
     <SimpleShowLayout>
-      <ImageField source="profileImg" />
+      <CustomImageField source="profileImg" />
       <TextField source="name" />
+
       <TextField source="email" />
     </SimpleShowLayout>
   </Show>
