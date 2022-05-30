@@ -46,7 +46,11 @@ export const Games = () => {
     >
       {data.map((game) => (
         <Paper
-          style={{
+          sx={{
+            padding: 1,
+            "&:hover": {
+              boxShadow: 8,
+            },
             backgroundImage: `url(http://localhost:5000/${game.gameImage})`,
           }}
           onClick={() => redirect(`http://localhost:3000/#/games/${game.id}`)}
