@@ -5,7 +5,7 @@ import {
   TextField,
   EmailField,
   DateField,
-  ImageField
+  ImageField,
 } from "react-admin";
 export const UserList = () => (
   <List>
@@ -15,10 +15,6 @@ export const UserList = () => (
       <NumberField source="active" />
       <TextField source="name" />
       <EmailField source="email" />
-
-      <DateField source="register_date" />
-      <DateField source="createdAt" />
-      <DateField source="updatedAt" />
     </Datagrid>
   </List>
 );

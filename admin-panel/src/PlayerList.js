@@ -44,9 +44,6 @@ export const PlayerList = () => (
       <TextField source="name" />
       <EmailField source="email" />
 
-      <DateField source="register_date" />
-      <DateField source="createdAt" />
-      <DateField source="updatedAt" />
       <EditButton />
     </Datagrid>
   </List>
@@ -65,10 +62,6 @@ export const PlayerEdit = () => (
 
       <TextInput source="password" validate={validatePassword} />
       <TextInput source="repeat_password" validate={validatePassword} />
-
-      <DateInput source="register_date" />
-      <DateInput source="createdAt" />
-      <DateInput source="updatedAt" />
     </SimpleForm>
   </Edit>
 );
@@ -85,10 +78,6 @@ export const PlayerCreate = () => (
 
       <TextInput source="password" validate={validatePassword} />
       <TextInput source="repeat_password" validate={validatePassword} />
-
-      <DateInput source="register_date" />
-      <DateInput source="createdAt" />
-      <DateInput source="updatedAt" />
     </SimpleForm>
   </Create>
 );

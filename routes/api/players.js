@@ -138,7 +138,7 @@ router.get("/:id", auth, async (req, res) => {
 
 router.put("/:id", auth, async (req, res) => {
   console.log("update route called");
-  const { new_password, active, name, email, pictures } = req.body;
+  const { password, repeat_password, active, name, email, pictures } = req.body;
 
   let player = await Player.findOne({
     where: { id: req.params.id },
@@ -154,7 +154,7 @@ router.put("/:id", auth, async (req, res) => {
   }
 
   let salt = await bcryptjs.genSalt(10);
-  let hash = await bcryptjs.hash(new_password, salt);
+  let hash = await bcryptjs.hash(password, salt);
   await Player.update(
     {
       password: hash,
@@ -173,7 +173,8 @@ router.put("/:id", auth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   console.log("create route called");
-  const { password, active, name, email, pictures } = req.body;
+  const { password, repeat_password, active, name, email, pictures } = req.body;
+  //Validate input here
 
   let imageHash = "";
   if (pictures !== undefined) {
