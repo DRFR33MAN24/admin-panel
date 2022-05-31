@@ -20,13 +20,15 @@ import {
   useListContext,
   useRedirect,
 } from "react-admin";
+import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
 import { Box, Paper } from "@mui/material";
-const styles = {
-  gameContainer: {
-    backgroundImage: `url(http://localhost:5000/logo192.png)`,
-  },
-};
+import { useEffect } from "react";
+// const styles = {
+//   gameContainer: {
+//     backgroundImage: `url(http://localhost:5000/logo192.png)`,
+//   },
+// };
 export const Games = () => {
   const { data } = useListContext();
   console.log(data);
@@ -53,7 +55,9 @@ export const Games = () => {
             },
             backgroundImage: `url(http://localhost:5000/${game.gameImage})`,
           }}
-          onClick={() => redirect(`http://localhost:3000/#/games/${game.id}`)}
+          onClick={() =>
+            redirect(`http://localhost:3000/#/games/${game.id}/show`)
+          }
         >
           {game.id}
           {game.name}
@@ -95,11 +99,35 @@ export const GameCreate = () => (
     </SimpleForm>
   </Create>
 );
-export const GameShow = () => (
-  <Show>
-    <SimpleShowLayout>
-      <CustomImageField source="gameImage" />
-      <TextField source="name" />
-    </SimpleShowLayout>
-  </Show>
-);
+export const GameShow = () => {
+  let json;
+  useEffect(() => {
+    (async function () {
+      json = await httpClient(`${apiUrl}/games`);
+      console.log(json);
+    })();
+  }, []);
+
+  // const data = [
+  //   {
+  //     id: 7,
+  //     name: "Happy Farm",
+  //     gameImage: "73ed973a-3347-4e7a-8b6a-ac82a9ab7513",
+  //   },
+  // ];
+  const sort = { field: "id", order: "DESC" };
+  return (
+    <Show>
+      <SimpleShowLayout>
+        <CustomImageField source="gameImage" />
+        <TextField source="name" />
+        {json !== undefined ? (
+          <Datagrid data={json.json} total={2} isLoading={false} sort={sort}>
+            <TextField source="id" />
+            <TextField source="name" />
+          </Datagrid>
+        ) : null}
+      </SimpleShowLayout>
+    </Show>
+  );
+};

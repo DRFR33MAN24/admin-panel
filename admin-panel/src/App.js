@@ -9,7 +9,7 @@ import {
 } from "react-admin";
 import { UserList } from "./UserList";
 import { PlayerList, PlayerEdit, PlayerShow, PlayerCreate } from "./PlayerList";
-import { GameList, GameEdit } from "./GameList";
+import { GameList, GameEdit, GameShow, GameCreate } from "./GameList";
 import authProvider from "./authProvider";
 import addUploadFeature from "./addUploadFeature";
 
@@ -27,7 +27,13 @@ const App = () => (
     authProvider={authProvider}
   >
     <Resource name="users" list={UserList} />
-    <Resource name="games" list={GameList} edit={GameEdit} />
+    <Resource
+      name="games"
+      list={GameList}
+      edit={GameEdit}
+      show={GameShow}
+      create={GameCreate}
+    />
     <Resource
       name="players"
       list={PlayerList}

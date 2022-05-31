@@ -88,4 +88,8 @@ router.post("/", auth, async (req, res) => {
   res.end(JSON.stringify(req.body));
 });
 
+router.get("/getGamePlayers", auth, async (req, res) => {
+  res.json({ id: 1, title: "testData" });
+});
+
 module.exports = router;

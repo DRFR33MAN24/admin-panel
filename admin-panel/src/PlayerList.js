@@ -18,6 +18,9 @@ import {
   ImageField,
   ImageInput,
   minLength,
+  required,
+  maxLength,
+  email,
 } from "react-admin";
 import { CustomImageField } from "./CustomImageField";
 
