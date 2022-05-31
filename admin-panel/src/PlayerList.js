@@ -17,8 +17,24 @@ import {
   EditButton,
   ImageField,
   ImageInput,
+  minLength,
 } from "react-admin";
 import { CustomImageField } from "./CustomImageField";
+
+const validatePlayer = (values) => {
+  const errors = {};
+  if (values.new_password !== values.repeat_password) {
+    errors.password = "Passwords dosen't match";
+  }
+
+  return errors;
+};
+
+const validateName = [required(), minLength(2), maxLength(15)];
+const validateEmail = email();
+
+const validatePassword = [required(), minLength(8)];
+
 export const PlayerList = () => (
   <List>
     <Datagrid rowClick="show">
@@ -38,17 +54,17 @@ export const PlayerList = () => (
 
 export const PlayerEdit = () => (
   <Edit>
-    <SimpleForm>
+    <SimpleForm validate={validatePlayer}>
       <TextInput source="id" />
       <NumberInput source="active" />
-      <TextInput source="name" />
-      <TextInput source="email" />
+      <TextInput source="name" validate={validateName} />
+      <TextInput source="email" validate={validateEmail} />
       <ImageInput source="pictures" multiple={true} accept="image/png">
         <ImageField source="src" title="profile image" />
       </ImageInput>
 
-      <TextInput source="new_password" />
-      <TextInput source="repeat_password" />
+      <TextInput source="password" validate={validatePassword} />
+      <TextInput source="repeat_password" validate={validatePassword} />
 
       <DateInput source="register_date" />
       <DateInput source="createdAt" />
@@ -58,17 +74,17 @@ export const PlayerEdit = () => (
 );
 export const PlayerCreate = () => (
   <Create>
-    <SimpleForm>
+    <SimpleForm validate={validatePlayer}>
       <TextInput source="id" />
       <NumberInput source="active" />
-      <TextInput source="name" />
-      <TextInput source="email" />
+      <TextInput source="name" validate={validateName} />
+      <TextInput source="email" validate={validateEmail} />
       <ImageInput source="pictures" multiple={true} accept="image/png">
         <ImageField source="src" title="profile image" />
       </ImageInput>
 
-      <TextInput source="password" />
-      <TextInput source="repeat_password" />
+      <TextInput source="password" validate={validatePassword} />
+      <TextInput source="repeat_password" validate={validatePassword} />
 
       <DateInput source="register_date" />
       <DateInput source="createdAt" />
