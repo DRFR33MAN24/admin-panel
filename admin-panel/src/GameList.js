@@ -26,7 +26,7 @@ import {
 } from "react-admin";
 import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
-import { Box, Paper, DialogTitle, Dialog } from "@mui/material";
+import { Box, Paper, DialogTitle, Dialog, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 // const styles = {
 //   gameContainer: {
@@ -107,7 +107,15 @@ export const GameShow = () => {
   let { record } = useShowController();
 
   const [data, setData] = useState(undefined);
+  const [open, setOpen] = useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+  };
   useEffect(() => {
     (async function () {
       try {
@@ -124,15 +132,16 @@ export const GameShow = () => {
   const sort = { field: "id", order: "DESC" };
   return (
     <Show>
-      <Dialog open={true}>
+      <Dialog open={open}>
         <DialogTitle>Add Player to Game:</DialogTitle>
+        <Button onClick={handleClose}>Close</Button>
       </Dialog>
       <SimpleShowLayout>
         <CustomImageField source="gameImage" />
         <TextField source="name" />
         {data !== undefined ? (
           <div>
-            <CreateButton label="Add player" />
+            <CreateButton label="Add player" onClick={handleClickOpen} />
             <Datagrid data={data} total={1} isLoading={false} sort={sort}>
               <TextField source="id" />
               <TextField source="name" />
