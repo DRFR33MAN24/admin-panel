@@ -141,7 +141,9 @@ export const GameShow = () => {
         <TextField source="name" />
         {data !== undefined ? (
           <div>
-            <CreateButton label="Add player" onClick={handleClickOpen} />
+            <Button variant="outlined" onClick={handleClickOpen}>
+              Add player
+            </Button>
             <Datagrid data={data} total={1} isLoading={false} sort={sort}>
               <TextField source="id" />
               <TextField source="name" />
