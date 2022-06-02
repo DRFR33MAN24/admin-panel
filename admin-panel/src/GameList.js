@@ -19,11 +19,13 @@ import {
   ImageInput,
   useListContext,
   useRedirect,
+  useRecordContext,
+  useShowContext,
 } from "react-admin";
 import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
 import { Box, Paper } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // const styles = {
 //   gameContainer: {
 //     backgroundImage: `url(http://localhost:5000/logo192.png)`,
@@ -31,7 +33,7 @@ import { useEffect } from "react";
 // };
 export const Games = () => {
   const { data } = useListContext();
-  console.log(data);
+  //console.log(data);
   const redirect = useRedirect();
 
   return (
@@ -100,29 +102,32 @@ export const GameCreate = () => (
   </Create>
 );
 export const GameShow = () => {
-  let json;
+  // let show = useShowContext();
+  // console.log(show);
+  const [data, setData] = useState(undefined);
+
   useEffect(() => {
     (async function () {
-      json = await httpClient(`${apiUrl}/games`);
-      console.log(json);
+      try {
+
+        let json = await httpClient(`${apiUrl}/games/getGamePlayers/?gameId=${1}`);
+        setData(json.json);
+      } catch (error) {
+        console.log(error);
+      }
+
     })();
   }, []);
 
-  // const data = [
-  //   {
-  //     id: 7,
-  //     name: "Happy Farm",
-  //     gameImage: "73ed973a-3347-4e7a-8b6a-ac82a9ab7513",
-  //   },
-  // ];
+
   const sort = { field: "id", order: "DESC" };
   return (
     <Show>
       <SimpleShowLayout>
         <CustomImageField source="gameImage" />
         <TextField source="name" />
-        {json !== undefined ? (
-          <Datagrid data={json.json} total={2} isLoading={false} sort={sort}>
+        {data !== undefined ? (
+          <Datagrid data={data} total={1} isLoading={false} sort={sort}>
             <TextField source="id" />
             <TextField source="name" />
           </Datagrid>

@@ -22,6 +22,15 @@ router.get("/", auth, async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(games));
 });
+router.get("/getGamePlayers", auth, async (req, res) => {
+  console.log("getGamePlayers called");
+  const gameId = req.query.gameId;
+
+  let game = await Game.findByPk(gameId);
+  let players = await game.getPlayers();
+  //console.log(players);
+  res.json(players);
+});
 
 router.get("/:id", auth, async (req, res) => {
   console.log("getting a game by id");
@@ -88,8 +97,5 @@ router.post("/", auth, async (req, res) => {
   res.end(JSON.stringify(req.body));
 });
 
-router.get("/getGamePlayers", auth, async (req, res) => {
-  res.json({ id: 1, title: "testData" });
-});
 
 module.exports = router;

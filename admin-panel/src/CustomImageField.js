@@ -2,7 +2,7 @@ import { useRecordContext } from "react-admin";
 
 export const CustomImageField = (props) => {
   const record = useRecordContext(props);
-  console.log(record);
+  // console.log(record);
   return record ? (
     <div>
 

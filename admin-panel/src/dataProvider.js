@@ -21,6 +21,7 @@ export const httpClient = (url, options = {}) => {
   }
   const token = localStorage.getItem("token");
   options.headers.set("x-auth-token", token);
+  //console.log(url, options);
   return fetchUtils.fetchJson(url, options);
 };
 
