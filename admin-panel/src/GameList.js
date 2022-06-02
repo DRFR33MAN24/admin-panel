@@ -26,7 +26,14 @@ import {
 } from "react-admin";
 import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
-import { Box, Paper, DialogTitle, Dialog, Button } from "@mui/material";
+import {
+  Box,
+  Paper,
+  DialogTitle,
+  Dialog,
+  Button,
+  TextField as MUITextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 // const styles = {
 //   gameContainer: {
@@ -134,7 +141,18 @@ export const GameShow = () => {
     <Show>
       <Dialog open={open}>
         <DialogTitle>Add Player to Game:</DialogTitle>
-        <Button onClick={handleClose}>Close</Button>
+        <Box
+          sx={{
+            padding: 4,
+          }}
+        >
+          <MUITextField
+            id="standard-basic"
+            label="Standard"
+            variant="standard"
+          />
+          <Button onClick={handleClose}>Close</Button>
+        </Box>
       </Dialog>
       <SimpleShowLayout>
         <CustomImageField source="gameImage" />
