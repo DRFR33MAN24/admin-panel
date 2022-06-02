@@ -21,10 +21,12 @@ import {
   useRedirect,
   useRecordContext,
   useShowContext,
+  useShowController,
+  CreateButton,
 } from "react-admin";
 import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, DialogTitle, Dialog } from "@mui/material";
 import { useEffect, useState } from "react";
 // const styles = {
 //   gameContainer: {
@@ -102,35 +104,40 @@ export const GameCreate = () => (
   </Create>
 );
 export const GameShow = () => {
-  // let show = useShowContext();
-  // console.log(show);
+  let { record } = useShowController();
+
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
     (async function () {
       try {
-
-        let json = await httpClient(`${apiUrl}/games/getGamePlayers/?gameId=${1}`);
+        let json = await httpClient(
+          `${apiUrl}/games/getGamePlayers/?gameId=${record.id}`
+        );
         setData(json.json);
       } catch (error) {
         console.log(error);
       }
-
     })();
   }, []);
-
 
   const sort = { field: "id", order: "DESC" };
   return (
     <Show>
+      <Dialog open={true}>
+        <DialogTitle>Add Player to Game:</DialogTitle>
+      </Dialog>
       <SimpleShowLayout>
         <CustomImageField source="gameImage" />
         <TextField source="name" />
         {data !== undefined ? (
-          <Datagrid data={data} total={1} isLoading={false} sort={sort}>
-            <TextField source="id" />
-            <TextField source="name" />
-          </Datagrid>
+          <div>
+            <CreateButton label="Add player" />
+            <Datagrid data={data} total={1} isLoading={false} sort={sort}>
+              <TextField source="id" />
+              <TextField source="name" />
+            </Datagrid>
+          </div>
         ) : null}
       </SimpleShowLayout>
     </Show>

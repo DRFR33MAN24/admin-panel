@@ -97,5 +97,4 @@ router.post("/", auth, async (req, res) => {
   res.end(JSON.stringify(req.body));
 });
 
-
 module.exports = router;
