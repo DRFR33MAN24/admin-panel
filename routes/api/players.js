@@ -112,21 +112,32 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/searchPlayers", auth, async (req, res) => {
+  console.log("seraching for player");
+  const { searchQuery } = req.query;
+  if (!searchQuery) {
+    return res.json([{ label: "NO Players ", id: 1 }]);
+  }
   try {
-
     const players = await Player.findAll({
       where: {
-        name: { [Sequelize.Op.like]: `%${searchQuery}%` }
+        name: { [Sequelize.Op.like]: `%${searchQuery}%` },
       },
-      plain: true,
-    })
-    const result = players.map(player => {
+      limit: 10,
+      raw: true,
+    });
+    console.log(players);
+    if (!players) {
+      res.end(404);
+      return;
+    }
+    const result = players.map((player) => {
       return {
-        lable: player.name,
-        id: player.id
-      }
-    })
-    res.json(result);
+        label: player.name,
+        id: player.id,
+      };
+    });
+    console.log(result);
+    return res.json(result);
   } catch (error) {
     console.log(error);
     res.end(400);

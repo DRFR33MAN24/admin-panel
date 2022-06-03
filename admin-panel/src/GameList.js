@@ -125,13 +125,26 @@ export const GameShow = () => {
   const handleClose = (value) => {
     setOpen(false);
   };
+  const addPlayer = () => {
+    console.log(value);
+    try {
+      (async function () {
+        let json = await httpClient(`${apiUrl}/games/addPlayer?id=${value}`);
+        console.log(json);
+      })();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const SearchBar = () => {
     const [options, setOptions] = useState([]);
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
     const fetch = async () => {
       try {
-        let json = await httpClient(`${apiUrl}/players/searchPlayers`);
+        let json = await httpClient(
+          `${apiUrl}/players/searchPlayers?searchQuery=${inputValue}`
+        );
         console.log(json);
         setOptions(json.json);
       } catch (error) {
@@ -188,6 +201,7 @@ export const GameShow = () => {
         >
           <SearchBar />
           <Button onClick={handleClose}>Close</Button>
+          <Button onClick={addPlayer}>Add</Button>
         </Box>
       </Dialog>
       <SimpleShowLayout>
