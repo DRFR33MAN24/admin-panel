@@ -33,7 +33,9 @@ import {
   Dialog,
   Button,
   TextField as MUITextField,
+  Autocomplete,
 } from "@mui/material";
+import throttle from "lodash/throttle";
 import { useEffect, useState } from "react";
 // const styles = {
 //   gameContainer: {
@@ -123,6 +125,41 @@ export const GameShow = () => {
   const handleClose = (value) => {
     setOpen(false);
   };
+  const SearchBar = () => {
+    const [options, setOptions] = useState([]);
+    const [value, setValue] = useState("");
+    const [inputValue, setInputValue] = React.useState("");
+    const fetch = async () => {
+      try {
+        let json = await httpClient(`${apiUrl}/players/searchPlayers`);
+        console.log(json);
+        setOptions(json);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    useEffect(() => {
+      console.log(value, inputValue);
+      throttle(fetch, 500)();
+    }, [value, inputValue]);
+
+    return (
+      <Autocomplete
+        id="standard-basic"
+        options={options}
+        filterOptions={(x) => x}
+        value={value}
+        onChange={(event, newValue) => {
+          setOptions(newValue ? [newValue, ...options] : options);
+          setValue(newValue);
+        }}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+      />
+    );
+  };
   useEffect(() => {
     (async function () {
       try {
@@ -146,11 +183,7 @@ export const GameShow = () => {
             padding: 4,
           }}
         >
-          <MUITextField
-            id="standard-basic"
-            label="Standard"
-            variant="standard"
-          />
+          <SearchBar />
           <Button onClick={handleClose}>Close</Button>
         </Box>
       </Dialog>
