@@ -3,7 +3,7 @@ const router = express.Router();
 
 const auth = require("../../middleware/auth");
 
-const { Game } = require("../../models");
+const { Game, Player } = require("../../models");
 const { parseQuery, saveProfileImage } = require("../../utility");
 
 router.get("/", auth, async (req, res) => {
@@ -95,6 +95,19 @@ router.post("/", auth, async (req, res) => {
   });
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(req.body));
+});
+
+router.post("/addPlayer", auth, async (req, res) => {
+  console.log("addPlayer route called");
+  const { id } = req.body;
+  if (!id) {
+    return res.json({ status: 404 });
+  }
+  try {
+    Game.addPlayer(await Player.findByPk(id));
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;
