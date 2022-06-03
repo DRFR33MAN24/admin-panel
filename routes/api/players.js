@@ -10,6 +10,7 @@ const auth = require("../../middleware/auth");
 
 const { Player } = require("../../models");
 const { parseQuery, saveProfileImage } = require("../../utility");
+const { Sequelize } = require("../../database");
 
 // @route POST api/users
 // @desc Register New User
@@ -111,10 +112,25 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/searchPlayers", auth, async (req, res) => {
-  res.json([
-    { label: "warrior", id: 1 },
-    { label: "madness", id: 2 },
-  ]);
+  try {
+
+    const players = await Player.findAll({
+      where: {
+        name: { [Sequelize.Op.like]: `%${searchQuery}%` }
+      },
+      plain: true,
+    })
+    const result = players.map(player => {
+      return {
+        lable: player.name,
+        id: player.id
+      }
+    })
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    res.end(400);
+  }
 });
 
 router.get("/:id", auth, async (req, res) => {
