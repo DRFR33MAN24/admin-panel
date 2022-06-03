@@ -128,12 +128,12 @@ export const GameShow = () => {
   const SearchBar = () => {
     const [options, setOptions] = useState([]);
     const [value, setValue] = useState("");
-    const [inputValue, setInputValue] = React.useState("");
+    const [inputValue, setInputValue] = useState("");
     const fetch = async () => {
       try {
         let json = await httpClient(`${apiUrl}/players/searchPlayers`);
         console.log(json);
-        setOptions(json);
+        setOptions(json.json);
       } catch (error) {
         console.log(error);
       }
@@ -157,6 +157,9 @@ export const GameShow = () => {
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
+        renderInput={(params) => (
+          <MUITextField {...params} label="Add player" fullWidth />
+        )}
       />
     );
   };

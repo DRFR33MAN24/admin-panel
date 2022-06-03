@@ -110,6 +110,13 @@ router.get("/", auth, async (req, res) => {
   res.end(JSON.stringify(player));
 });
 
+router.get("/searchPlayers", auth, async (req, res) => {
+  res.json([
+    { label: "warrior", id: 1 },
+    { label: "madness", id: 2 },
+  ]);
+});
+
 router.get("/:id", auth, async (req, res) => {
   console.log("getting a record");
   let player = await Player.findAll({
