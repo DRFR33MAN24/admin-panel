@@ -99,12 +99,13 @@ router.post("/", auth, async (req, res) => {
 
 router.post("/addPlayer", auth, async (req, res) => {
   console.log("addPlayer route called");
-  const { id } = req.body;
-  if (!id) {
+  const { playerId, gameId } = req.body;
+  if (!playerId || !gameId) {
     return res.json({ status: 404 });
   }
   try {
-    Game.addPlayer(await Player.findByPk(id));
+    const game = await Game.findByPk(gameId);
+    game.addPlayer(await Player.findByPk(playerId));
   } catch (error) {
     console.log(error);
   }

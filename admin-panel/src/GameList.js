@@ -117,6 +117,7 @@ export const GameShow = () => {
 
   const [data, setData] = useState(undefined);
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -126,10 +127,13 @@ export const GameShow = () => {
     setOpen(false);
   };
   const addPlayer = () => {
-    console.log(value);
+    console.log("Player value", value);
     try {
       (async function () {
-        let json = await httpClient(`${apiUrl}/games/addPlayer?id=${value}`);
+        let json = await httpClient(`${apiUrl}/games/addPlayer`, {
+          method: "POST",
+          body: JSON.stringify({ playerId: value.id, gameId: record.id }),
+        });
         console.log(json);
       })();
     } catch (error) {
@@ -138,7 +142,6 @@ export const GameShow = () => {
   };
   const SearchBar = () => {
     const [options, setOptions] = useState([]);
-    const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
     const fetch = async () => {
       try {
