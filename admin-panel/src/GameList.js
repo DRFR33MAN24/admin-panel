@@ -23,6 +23,7 @@ import {
   useShowContext,
   useShowController,
   CreateButton,
+  FunctionField,
 } from "react-admin";
 import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
@@ -140,6 +141,21 @@ export const GameShow = () => {
       console.log(error);
     }
   };
+
+  const deletePlayer = (id) => {
+    try {
+      (async function () {
+        let json = await httpClient(`${apiUrl}/games/deletePlayer`, {
+          method: "POST",
+          body: JSON.stringify({ playerId: id, gameId: record.id }),
+        });
+        console.log(json);
+      })();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const SearchBar = () => {
     const [options, setOptions] = useState([]);
     const [inputValue, setInputValue] = useState("");
@@ -218,6 +234,18 @@ export const GameShow = () => {
             <Datagrid data={data} total={1} isLoading={false} sort={sort}>
               <TextField source="id" />
               <TextField source="name" />
+              <FunctionField
+                render={(record) => {
+                  return (
+                    <Button
+                      variant="outlined"
+                      onClick={() => deletePlayer(record.id)}
+                    >
+                      Delete
+                    </Button>
+                  );
+                }}
+              />
             </Datagrid>
           </div>
         ) : null}

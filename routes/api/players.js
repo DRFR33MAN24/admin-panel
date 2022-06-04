@@ -125,7 +125,7 @@ router.get("/searchPlayers", auth, async (req, res) => {
       limit: 10,
       raw: true,
     });
-    console.log(players);
+    // console.log(players);
     if (!players) {
       res.end(404);
       return;
@@ -136,7 +136,7 @@ router.get("/searchPlayers", auth, async (req, res) => {
         id: player.id,
       };
     });
-    console.log(result);
+    // console.log(result);
     return res.json(result);
   } catch (error) {
     console.log(error);

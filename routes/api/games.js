@@ -110,5 +110,18 @@ router.post("/addPlayer", auth, async (req, res) => {
     console.log(error);
   }
 });
+router.post("/deletePlayer", auth, async (req, res) => {
+  console.log("deletePlayer route called");
+  const { playerId, gameId } = req.body;
+  if (!playerId || !gameId) {
+    return res.json({ status: 404 });
+  }
+  try {
+    const game = await Game.findByPk(gameId);
+    game.removePlayer(await Player.findByPk(playerId));
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;
