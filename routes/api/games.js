@@ -25,76 +25,107 @@ router.get("/", auth, async (req, res) => {
 router.get("/getGamePlayers", auth, async (req, res) => {
   console.log("getGamePlayers called");
   const gameId = req.query.gameId;
-
-  let game = await Game.findByPk(gameId);
-  let players = await game.getPlayers();
-  //console.log(players);
-  res.json(players);
+  if (!gameId) {
+    return res.json(JSON.stringify({ status: 404 }));
+  }
+  try {
+    let game = await Game.findByPk(gameId);
+    let players = await game.getPlayers();
+    //console.log(players);
+    res.json(players);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get("/:id", auth, async (req, res) => {
   console.log("getting a game by id");
-  let game = await Game.findAll({
-    where: {
-      id: req.params.id,
-    },
-    plain: true,
-  });
-
-  if (!game) {
-    return res.status(404).json({ msg: "Not Found" });
+  const id = req.params.id;
+  if (!id) {
+    return res.json(JSON.stringify({ status: 404 }));
   }
+  try {
+    let game = await Game.findAll({
+      where: {
+        id: id,
+      },
+      plain: true,
+    });
 
-  res.json(game);
+    if (!game) {
+      return res.status(404).json({ msg: "Not Found" });
+    }
+    res.json(game);
+  } catch (error) {
+    console.log(error);
+    return res.json(JSON.stringify({ status: 500 }));
+  }
 });
 
 router.put("/:id", auth, async (req, res) => {
   console.log("update route called");
   const { name, pictures } = req.body;
 
-  let game = await Game.findOne({
-    where: { id: req.params.id },
-    raw: true,
-    plain: true,
-  });
-  //console.log(player);
-  let imageHash = "";
-  if (pictures !== undefined) {
-    imageHash = saveProfileImage(pictures, game.gameImage);
-  } else {
-    imageHash = game.gameImage;
+  if (!name) {
+    return res.json(JSON.stringify({ status: 400 }));
   }
 
-  await Game.update(
-    {
-      name: name,
-
-      gameImage: imageHash,
-    },
-    {
+  try {
+    let game = await Game.findOne({
       where: { id: req.params.id },
+      raw: true,
+      plain: true,
+    });
+
+    let imageHash = "";
+    if (pictures) {
+      imageHash = saveProfileImage(pictures, game.gameImage);
+    } else {
+      imageHash = game.gameImage;
     }
-  );
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.body));
+
+    await Game.update(
+      {
+        name: name,
+
+        gameImage: imageHash,
+      },
+      {
+        where: { id: req.params.id },
+      }
+    );
+
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(req.body));
+  } catch (error) {
+    console.log(error);
+    return res.json(JSON.stringify({ status: 500 }));
+  }
+  //console.log(player);
 });
 
 router.post("/", auth, async (req, res) => {
   console.log("create route called");
   const { name, pictures } = req.body;
-
+  if (!name) {
+    return res.json(JSON.stringify({ status: 400 }));
+  }
   let imageHash = "";
-  if (pictures !== undefined) {
+  if (pictures) {
     imageHash = saveProfileImage(pictures, "");
   }
+  try {
+    await Game.create({
+      name: name,
 
-  await Game.create({
-    name: name,
-
-    profileImg: imageHash,
-  });
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.body));
+      profileImg: imageHash,
+    });
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(req.body));
+  } catch (error) {
+    console.log(error);
+    return res.json(JSON.stringify({ status: 500 }));
+  }
 });
 
 router.post("/addPlayer", auth, async (req, res) => {
