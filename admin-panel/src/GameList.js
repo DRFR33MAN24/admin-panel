@@ -126,6 +126,7 @@ export const GameShow = () => {
 
   const handleClose = (value) => {
     setOpen(false);
+    fetchGamePlayers();
   };
   const addPlayer = () => {
     console.log("Player value", value);
@@ -136,6 +137,7 @@ export const GameShow = () => {
           body: JSON.stringify({ playerId: value.id, gameId: record.id }),
         });
         console.log(json);
+        await fetchGamePlayers();
       })();
     } catch (error) {
       console.log(error);
@@ -150,6 +152,7 @@ export const GameShow = () => {
           body: JSON.stringify({ playerId: id, gameId: record.id }),
         });
         console.log(json);
+        await fetchGamePlayers();
       })();
     } catch (error) {
       console.log(error);
@@ -195,17 +198,18 @@ export const GameShow = () => {
       />
     );
   };
+  const fetchGamePlayers = async () => {
+    try {
+      let json = await httpClient(
+        `${apiUrl}/games/getGamePlayers/?gameId=${record.id}`
+      );
+      setData(json.json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    (async function () {
-      try {
-        let json = await httpClient(
-          `${apiUrl}/games/getGamePlayers/?gameId=${record.id}`
-        );
-        setData(json.json);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    fetchGamePlayers();
   }, []);
 
   const sort = { field: "id", order: "DESC" };
