@@ -136,9 +136,10 @@ export const GameShow = () => {
           method: "POST",
           body: JSON.stringify({ playerId: value.id, gameId: record.id }),
         });
-        console.log(json);
-        await fetchGamePlayers();
       })();
+      console.log("addPlayer");
+      fetchGamePlayers();
+      console.log("addPlayer fetched");
     } catch (error) {
       console.log(error);
     }
@@ -151,9 +152,10 @@ export const GameShow = () => {
           method: "POST",
           body: JSON.stringify({ playerId: id, gameId: record.id }),
         });
-        console.log(json);
-        await fetchGamePlayers();
       })();
+      console.log("deletePlayer");
+      fetchGamePlayers();
+      console.log("deletePlayer fetched");
     } catch (error) {
       console.log(error);
     }
@@ -199,16 +201,22 @@ export const GameShow = () => {
     );
   };
   const fetchGamePlayers = async () => {
+    console.log("fetchGamePlayers");
+    if (!record) {
+      return;
+    }
     try {
       let json = await httpClient(
         `${apiUrl}/games/getGamePlayers/?gameId=${record.id}`
       );
+      console.log("fetchGamePlayers", json);
       setData(json.json);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
+    console.log("useEffect");
     fetchGamePlayers();
   }, []);
 
