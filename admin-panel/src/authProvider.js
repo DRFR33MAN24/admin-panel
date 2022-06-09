@@ -12,10 +12,12 @@ export default {
         }
         return response.json();
       })
-      .then(({ token }) => {
+      .then(({ token, permissions }) => {
         // store the token in local storage
         console.log(token);
+        console.log(permissions);
         localStorage.setItem("token", token);
+        localStorage.setItem("permissions", permissions);
       })
       .catch(() => {
         throw new Error("Network error");
@@ -34,8 +36,8 @@ export default {
     localStorage.getItem("token") ? Promise.resolve() : Promise.reject(),
 
   getPermissions: () => {
-    // Required for the authentication to work
-    return Promise.resolve();
+    const role = localStorage.getItem("permissions");
+    return role ? Promise.resolve(role) : Promise.reject();
   },
   logout: () => {
     localStorage.removeItem("token");

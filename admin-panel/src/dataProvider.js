@@ -123,6 +123,7 @@ export default {
           method: "POST",
           body: JSON.stringify({ playerId: playerId, gameId: gameId }),
         });
+        return json;
       } catch (error) {
         console.log(error);
       }
@@ -135,6 +136,7 @@ export default {
           method: "POST",
           body: JSON.stringify({ playerId: playerId, gameId: gameId }),
         });
+        return json;
       } catch (error) {
         console.log(error);
       }
@@ -146,6 +148,7 @@ export default {
         let json = await httpClient(
           `${apiUrl}/players/searchPlayers?searchQuery=${searchQuery}`
         );
+        return json;
       } catch (error) {
         console.log(error);
       }
@@ -157,6 +160,8 @@ export default {
         let json = await httpClient(
           `${apiUrl}/games/getGamePlayers/?gameId=${gameId}`
         );
+
+        return json;
       } catch (error) {
         console.log(error);
       }

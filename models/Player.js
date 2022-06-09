@@ -39,6 +39,18 @@ const Player = db.define(
 
       // allowNull defaults to true
     },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "user",
+      // allowNull defaults to true
+    },
+    credits: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      defaultValue: 0,
+      // allowNull defaults to true
+    },
 
     register_date: {
       type: DataTypes.DATE,
