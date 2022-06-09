@@ -115,4 +115,51 @@ export default {
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));
   },
+  // custom methods
+  addPlayer: (playerId, gameId) => {
+    (async function () {
+      try {
+        let json = await httpClient(`${apiUrl}/games/addPlayer`, {
+          method: "POST",
+          body: JSON.stringify({ playerId: playerId, gameId: gameId }),
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  },
+  deletePlayer: (playerId, gameId) => {
+    (async function () {
+      try {
+        let json = await httpClient(`${apiUrl}/games/deletePlayer`, {
+          method: "POST",
+          body: JSON.stringify({ playerId: playerId, gameId: gameId }),
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  },
+  searchPlayers: (searchQuery) => {
+    (async function () {
+      try {
+        let json = await httpClient(
+          `${apiUrl}/players/searchPlayers?searchQuery=${searchQuery}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  },
+  getGamePlayers: (gameId) => {
+    (async function () {
+      try {
+        let json = await httpClient(
+          `${apiUrl}/games/getGamePlayers/?gameId=${gameId}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  },
 };

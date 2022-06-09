@@ -24,6 +24,7 @@ import {
   useShowController,
   CreateButton,
   FunctionField,
+  useDataProvider,
 } from "react-admin";
 import { httpClient, apiUrl } from "./dataProvider";
 import { CustomImageField } from "./CustomImageField";
@@ -115,7 +116,7 @@ export const GameCreate = () => (
 );
 export const GameShow = () => {
   let { record } = useShowController();
-
+  const dataProvider = useDataProvider();
   const [data, setData] = useState(undefined);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -126,59 +127,66 @@ export const GameShow = () => {
 
   const handleClose = (value) => {
     setOpen(false);
-    fetchGamePlayers();
+    dataProvider.getGamePlayers(record.id);
+    //fetchGamePlayers();
   };
   const addPlayer = () => {
     console.log("Player value", value);
-    try {
-      (async function () {
-        let json = await httpClient(`${apiUrl}/games/addPlayer`, {
-          method: "POST",
-          body: JSON.stringify({ playerId: value.id, gameId: record.id }),
-        });
-      })();
-      console.log("addPlayer");
-      fetchGamePlayers();
-      console.log("addPlayer fetched");
-    } catch (error) {
-      console.log(error);
-    }
+    dataProvider.addPlayer(value.id, record.id);
+    dataProvider.getGamePlayers(record.id);
+    //fetchGamePlayers();
+
+    // try {
+    //   (async function () {
+    //     let json = await httpClient(`${apiUrl}/games/addPlayer`, {
+    //       method: "POST",
+    //       body: JSON.stringify({ playerId: value.id, gameId: record.id }),
+    //     });
+    //   })();
+    //   console.log("addPlayer");
+    //   fetchGamePlayers();
+    //   console.log("addPlayer fetched");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const deletePlayer = (id) => {
-    try {
-      (async function () {
-        let json = await httpClient(`${apiUrl}/games/deletePlayer`, {
-          method: "POST",
-          body: JSON.stringify({ playerId: id, gameId: record.id }),
-        });
-      })();
-      console.log("deletePlayer");
-      fetchGamePlayers();
-      console.log("deletePlayer fetched");
-    } catch (error) {
-      console.log(error);
-    }
+    dataProvider.deletePlayer(id, record.id);
+    // try {
+    //   (async function () {
+    //     let json = await httpClient(`${apiUrl}/games/deletePlayer`, {
+    //       method: "POST",
+    //       body: JSON.stringify({ playerId: id, gameId: record.id }),
+    //     });
+    //   })();
+    //   console.log("deletePlayer");
+    //   fetchGamePlayers();
+    //   console.log("deletePlayer fetched");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const SearchBar = () => {
     const [options, setOptions] = useState([]);
     const [inputValue, setInputValue] = useState("");
-    const fetch = async () => {
-      try {
-        let json = await httpClient(
-          `${apiUrl}/players/searchPlayers?searchQuery=${inputValue}`
-        );
-        console.log(json);
-        setOptions(json.json);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    dataProvider.searchPlayers(inputValue);
+    // const fetch = async () => {
+    //   try {
+    //     let json = await httpClient(
+    //       `${apiUrl}/players/searchPlayers?searchQuery=${inputValue}`
+    //     );
+    //     console.log(json);
+    //     setOptions(json.json);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
     useEffect(() => {
       console.log(value, inputValue);
-      throttle(fetch, 500)();
+      throttle(dataProvider.searchPlayers, 500)();
     }, [value, inputValue]);
 
     return (
@@ -200,24 +208,25 @@ export const GameShow = () => {
       />
     );
   };
-  const fetchGamePlayers = async () => {
-    console.log("fetchGamePlayers");
-    if (!record) {
-      return;
-    }
-    try {
-      let json = await httpClient(
-        `${apiUrl}/games/getGamePlayers/?gameId=${record.id}`
-      );
-      console.log("fetchGamePlayers", json);
-      setData(json.json);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchGamePlayers = async () => {
+  //   console.log("fetchGamePlayers");
+  //   if (!record) {
+  //     return;
+  //   }
+  //   try {
+  //     let json = await httpClient(
+  //       `${apiUrl}/games/getGamePlayers/?gameId=${record.id}`
+  //     );
+  //     console.log("fetchGamePlayers", json);
+  //     setData(json.json);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   useEffect(() => {
     console.log("useEffect");
-    fetchGamePlayers();
+    dataProvider.getGamePlayers(record.id);
+    // fetchGamePlayers();
   }, []);
 
   const sort = { field: "id", order: "DESC" };
